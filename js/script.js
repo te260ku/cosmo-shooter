@@ -119,9 +119,14 @@ function onWindowResize() {
 }
 
 function animate() {
+    
     render();
     // 定期的にレンダラーを更新する
+
+    
     requestAnimationFrame(animate);
+
+    
 }
 
 function render() {

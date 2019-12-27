@@ -23,3 +23,6 @@ create.jsを使った2Dのシューティングゲームチュートリアル一
 
 - https://codepen.io/frhd/pen/bZJZWB
 大勝利．fpsの機能一式コード
+
+- https://github.com/saucecode/threejs-demos
+学習用のチュートリアル．これで作成したソースコードはdemo内にふ保存．
