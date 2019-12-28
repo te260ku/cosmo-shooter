@@ -63,7 +63,7 @@ MTLLoaderで得られたマテリアルをOBJLoaderに設定する必要があ�
 これは不要
 
 7. 複数のモデルのインスタンス生成
-
+できない
 ```
 REMEMBER: Loading in Javascript is asynchronous, so you need
 to wrap the code in a function and pass it the index. If you

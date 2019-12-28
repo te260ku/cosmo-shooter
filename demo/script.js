@@ -132,12 +132,12 @@ function init(){
                     }
                 });
 
-                gun = mesh;
-            
+					 gun = mesh;
+					 mesh.position.set(0,2,0);
+	             mesh.scale.set(10,10,10);
                 scene.add(mesh);
                 
-                mesh.position.set(0,2,0);
-	            mesh.scale.set(10,10,10);
+                
             });
 		
 	});
@@ -176,11 +176,9 @@ function createLights() {
     light.position.set(-3,6,-3);
     light.castShadow = true;
     
-    // これの詳しい使用を調べる
-    light.shadow.camera.near = 0.1;
-    light.shadow.camera.far = 25;
-
-
+   //  // これの詳しい使用を調べる
+   //  light.shadow.camera.near = 0.1;
+   //  light.shadow.camera.far = 25;
 
     scene.add(light);
 }
