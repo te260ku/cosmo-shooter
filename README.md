@@ -46,5 +46,31 @@ camera.position.x -= Math.sin(camera.rotation.y) * player.speed;
 4. テクスチャ
 サーバー建てないとテクスチャをロードできない
 
-5. モデルのロード
-サーバー建てるの面倒だからサボっちゃおww
+マテリアルのプロパティとして設定する
+- map
+基本的なテクスチャ
+- bumpMap
+グレースケール画像でピクセルの明度によって凹凸の高さを指定する．これを適用するとテクスチャに奥行きがでる．
+- normalMap
+法線マップ．光源にも反応する．
+
+- 2の累乗の長さの正方形がうまく動作する
+
+5. モデルとマテリアルのロード
+MTLLoaderで得られたマテリアルをOBJLoaderに設定する必要があるため，MTLLoaderのコールバック内でOBJLoaderを使用する．
+
+6. ローディング画面
+これは不要
+
+7. 複数のモデルのインスタンス生成
+
+```
+REMEMBER: Loading in Javascript is asynchronous, so you need
+to wrap the code in a function and pass it the index. If you
+don't, then the index '_key' can change while the model is being
+downloaded, and so the wrong model will be matched with the wrong index key.
+```
+
+8. 銃が見えるfps視点
+
+9. 弾丸の生成
