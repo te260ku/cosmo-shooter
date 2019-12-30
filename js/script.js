@@ -19,7 +19,7 @@ function getPointerLock() {
       stage.requestPointerLock();
     }
     document.addEventListener('pointerlockchange', lockChange, false); 
-  }
+}
 
 function lockChange() {
     if (document.pointerLockElement === stage) {

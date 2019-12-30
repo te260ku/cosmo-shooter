@@ -2,15 +2,36 @@
 <html>
 	<head>
 		<title>Demo</title>
-		<script src='https://s3-us-west-2.amazonaws.com/s.cdpn.io/515428/three.min.js'></script>
-      <script type="text/javascript" src="script.js" ></script>
-      <script type="text/javascript" src="MTLLoader.js" ></script>
-		<script type="text/javascript" src="OBJLoader.js" ></script>
+		
 		<link rel="stylesheet" href="style.css">
     </head>
     
 	<body>
-        <div id='stage'></div>
-        <!-- <span style="position:absolute;top:0px;left:0px;"><input type="button" value="Toggle Wireframe" onclick="cube.material.wireframe=!cube.material.wireframe;meshFloor.material.wireframe=!meshFloor.material.wireframe;"/></span> -->
+
+		<div id="status">
+			<div id="sight">
+				 <img src="img/sight.png" alt="">
+			
+			</div>
+	  </div>
+		<div id="blocker">
+			<div id="instructions">
+			<strong>Click to Start</strong>
+			
+			</div>
+	  </div>
+ 
+	  
+ 
+	  <div id='stage'></div>
+		  
+		  <!-- <span style="position:absolute;top:0px;left:0px;"><input type="button" value="Toggle Wireframe" onclick="cube.material.wireframe=!cube.material.wireframe;meshFloor.material.wireframe=!meshFloor.material.wireframe;"/></span> -->
+		  
+		  <script src='https://s3-us-west-2.amazonaws.com/s.cdpn.io/515428/three.min.js'></script>
+		<script src="PointerLockControl.js"></script>
+		<script type="text/javascript" src="script.js" ></script>
+		
+      <script type="text/javascript" src="MTLLoader.js" ></script>
+		<script type="text/javascript" src="OBJLoader.js" ></script>
 	</body>
 </html>

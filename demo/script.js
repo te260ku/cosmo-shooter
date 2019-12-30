@@ -9,6 +9,11 @@ var cubeWidth = 1;
 var cubeHeight = 1;
 var gun;
 
+
+var controls;
+var controlsEnabled = false;
+var blocker = document.getElementById('blocker');
+
 // 光源関連
 var ambientLight, light;
 
@@ -57,17 +62,56 @@ var USE_WIREFRAME = false;
 
 // ------------------------------------
 
+
+// getPointerLock();
 window.onload = init;
 
+function getPointerLock() {
+	document.onclick = function () {
+	  stage.requestPointerLock();
+	}
+	document.addEventListener('pointerlockchange', lockChange, false); 
+}
+
+function lockChange() {
+	if (document.pointerLockElement === stage) {
+		 blocker.style.display = "none";
+		 controls.enabled = true;
+	} else {
+		 blocker.style.display = "";
+		 controls.enabled = false;
+	}
+}
+
 function init(){
-    
+   //  getPointerLock();
     scene = new THREE.Scene();
     clock = new THREE.Clock();
     
     camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 0.1, 1000);
-    // Move the camera to 0,0,-5 (the Y axis is "up")
+	 // Move the camera to 0,0,-5 (the Y axis is "up")
+
+
+	//  const controls = new THREE.PointerLockControls(camera, gun); 
+	//  scene.add(controls.getObject());
+
+	 document.getElementById('blocker').addEventListener('click', function() {
+		controls.lock(); 
+		blocker.style.display = "none";
+	 });
+
+	
+
+	controls = new THREE.PointerLockControls(camera);
+	scene.add(controls.getObject());
+
+	
 	camera.position.set(0, player.height, -5);
 	camera.lookAt(new THREE.Vector3(0, player.height, 0));
+	scene.add(camera);
+
+	const axes = new THREE.AxisHelper(400);
+	scene.add(axes);
     
     createStage();
     createLights();
@@ -82,7 +126,10 @@ function init(){
 
         cube.position.y += 1;
         cube.castShadow = true;
-        scene.add(cube);
+		  scene.add(cube);
+		  
+		  
+	
 
         
         var meshFloorGeo = new THREE.PlaneGeometry(10,10, 10,10);
@@ -132,18 +179,25 @@ function init(){
                     }
                 });
 
+					 
+					//  mesh.position.set(0,2,-3);
+					//   mesh.position.set(
+					// 	camera.position.x - Math.sin(camera.rotation.y + Math.PI/6) * 0.75,
+					// 	camera.position.y - 0.5 + Math.sin(camera.position.x + camera.position.z)*0.01,
+					// 	camera.position.z + Math.cos(camera.rotation.y + Math.PI/6) * 0.75
+					// );
+					 mesh.scale.set(10,10,10);
 					 gun = mesh;
-					 mesh.position.set(0,2,0);
-	             mesh.scale.set(10,10,10);
+					
                 scene.add(mesh);
-                
-                
             });
 		
 	});
 
+	
     }
 
+	
 
     
     renderer = new THREE.WebGLRenderer();
@@ -161,6 +215,8 @@ function init(){
     
     window.addEventListener('resize', onWindowResize, false);
 	
+	
+	 
 	animate();
 }
 
@@ -203,54 +259,53 @@ function animate(){
 		bullets[index].position.add(bullets[index].velocity);
 	}
     
-    if(keyboard[87]){ // W key
-		camera.position.x -= Math.sin(camera.rotation.y) * player.speed;
-		camera.position.z -= -Math.cos(camera.rotation.y) * player.speed;
-	}
-	if(keyboard[83]){ // S key
-		camera.position.x += Math.sin(camera.rotation.y) * player.speed;
-		camera.position.z += -Math.cos(camera.rotation.y) * player.speed;
-	}
-	if(keyboard[65]){ // A key
-		// Redirect motion by 90 degrees
-		camera.position.x += Math.sin(camera.rotation.y + Math.PI/2) * player.speed;
-		camera.position.z += -Math.cos(camera.rotation.y + Math.PI/2) * player.speed;
-	}
-	if(keyboard[68]){ // D key
-		camera.position.x += Math.sin(camera.rotation.y - Math.PI/2) * player.speed;
-		camera.position.z += -Math.cos(camera.rotation.y - Math.PI/2) * player.speed;
-    }
+   //  if(keyboard[87]){ // W key
+	// 	camera.position.x -= Math.sin(camera.rotation.y) * player.speed;
+	// 	camera.position.z -= -Math.cos(camera.rotation.y) * player.speed;
+	// }
+	// if(keyboard[83]){ // S key
+	// 	camera.position.x += Math.sin(camera.rotation.y) * player.speed;
+	// 	camera.position.z += -Math.cos(camera.rotation.y) * player.speed;
+	// }
+	// if(keyboard[65]){ // A key
+	// 	// Redirect motion by 90 degrees
+	// 	camera.position.x += Math.sin(camera.rotation.y + Math.PI/2) * player.speed;
+	// 	camera.position.z += -Math.cos(camera.rotation.y + Math.PI/2) * player.speed;
+	// }
+	// if(keyboard[68]){ // D key
+	// 	camera.position.x += Math.sin(camera.rotation.y - Math.PI/2) * player.speed;
+	// 	camera.position.z += -Math.cos(camera.rotation.y - Math.PI/2) * player.speed;
+   //  }
     
-    // Keyboard turn inputs
-	if(keyboard[37]){ // left arrow key
-		camera.rotation.y -= player.turnSpeed;
-	}
-	if(keyboard[39]){ // right arrow key
-		camera.rotation.y += player.turnSpeed;
-    }
+   //  // Keyboard turn inputs
+	// if(keyboard[37]){ // left arrow key
+	// 	camera.rotation.y -= player.turnSpeed;
+	// }
+	// if(keyboard[39]){ // right arrow key
+	// 	camera.rotation.y += player.turnSpeed;
+   //  }
 
     if(keyboard[32] && player.canShoot <= 0){ // spacebar key
 		// creates a bullet as a Mesh object
 		var bullet = new THREE.Mesh(
-			new THREE.SphereGeometry(0.05,8,8),
-			new THREE.MeshBasicMaterial({color:0xffffff})
+			new THREE.SphereGeometry(0.5,3,3),
+			new THREE.MeshBasicMaterial({color:"#000000"})
 		);
-		// this is silly.
-		// var bullet = models.pirateship.mesh.clone();
-		
-		// position the bullet to come from the player's weapon
+
 		bullet.position.set(
 			gun.position.x,
-			gun.position.y + 0.15,
+			gun.position.y,
 			gun.position.z
 		);
 		
-		// set the velocity of the bullet
+		
 		bullet.velocity = new THREE.Vector3(
 			-Math.sin(camera.rotation.y),
-			0,
+			Math.sin(camera.rotation.y),
 			Math.cos(camera.rotation.y)
 		);
+
+
 		
 		// after 1000ms, set alive to false and remove from scene
 		// setting alive to false flags our update code to remove
@@ -267,20 +322,29 @@ function animate(){
 		player.canShoot = 10;
 	}
 	if(player.canShoot > 0) player.canShoot -= 1;
-    
+	 
+	// プレイヤーにガンを追従させる
+	// この処理はobjLoaderの後にする
     gun.position.set(
 		camera.position.x - Math.sin(camera.rotation.y + Math.PI/6) * 0.75,
 		camera.position.y - 0.5 + Math.sin(time*4 + camera.position.x + camera.position.z)*0.01,
 		camera.position.z + Math.cos(camera.rotation.y + Math.PI/6) * 0.75
 	);
-	gun.rotation.set(
-		camera.rotation.x,
-		camera.rotation.y - Math.PI,
-		camera.rotation.z
-	);
+
+	// gun.position.y = camera.position.y - 0.5 + Math.sin(time*4 + camera.position.x + camera.position.z)*0.01;
+
+	// gun.position.copy(camera.position);
+	// gun.rotation.set(
+	// 	camera.rotation.x,
+	// 	camera.rotation.y - Math.PI,
+	// 	camera.rotation.z
+	// );
+	gun.quaternion.copy( camera.quaternion );
 	
 	renderer.render(scene, camera);
 }
+
+
 
 function render() {
     renderer.render(scene, camera);
