@@ -10,15 +10,23 @@
 
     <div id="blocker">
         <div id="instructions">
-        <strong>Press W to Start</strong>
-        
+            <strong id="msg"></strong>
+
         </div>
     </div>
 
     <div id="status">
+
+        <progress id="timeBar" value="100" max="100" min="0"></progress>
         <h1 id="scoreLabel">score : <span id="score"></span></h1>
-        <h1 id="timeLabel">time : <span id="time"></span></h1>
+
     </div>
+
+    <!-- <div id="sightarea">
+        <div id="sight">
+            <img src="../demo/img/sight.png" alt="">
+       </div>
+    </div> -->
 
 
     <div id='stage'></div>
@@ -29,7 +37,7 @@
     <script src="../demo/MTLLoader.js"></script>
     <script src="../demo/OBJLoader.js"></script>
     <script src="script.js"></script>
-    
+
 
 </body>
 

@@ -49,20 +49,25 @@
 	position: absolute;
 	left: 5%;
 	top: 5%;
+	width: 100%;
 
-	/* background-color: rgba(0, 0, 0, 0.5); */
 }
 
 #scoreLabel, #timeLabel {
-	color: aquamarine;
+	color: #00cc00;
 }
 
-		
-#instructions2 {
+#sightarea {
+	position: absolute;
 	width: 100%;
 	height: 100%;
-    font-size: 30px;
-    font-family: 'Courier New';
+	text-align: center;
+}
+
+#sight {
+	width: 100%;
+	height: 100%;
+
 	display: -webkit-box;
 	display: -moz-box;
 	display: box;
@@ -72,10 +77,12 @@
 	-moz-box-pack: center;
 	-webkit-box-align: center;
 	-moz-box-align: center;
-	color: #ffffff;
 	text-align: center;
-	cursor: pointer;
+
 }
+
+
+
 
 #dino-alert {
 	position: absolute;
@@ -85,5 +92,21 @@
     text-align: center;
     padding-top:2%;
     vertical-align:middle;
-
 }
+
+#timeBar {
+	display: inline-block;
+	-webkit-appearance: none;
+	appearance: none;
+	height: 10px;
+	width: 75%;
+	/* vertical-align: -0.2em; */
+ }
+ 
+ #timeBar::-webkit-progress-bar {
+	  background: #ccc;
+ }
+ 
+ #timeBar::-webkit-progress-value {
+	background-color: #00cc00;
+ }

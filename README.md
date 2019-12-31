@@ -36,6 +36,8 @@ create.jsを使った2Dのシューティングゲームチュートリアル一
 - https://qiita.com/adrs2002/items/dd26fa318f7aa6aedc04
 逆引きtips．完成度が神．
 
+<img src="img/demo.png"></img>
+
 - https://discourse.threejs.org/t/collisions-two-objects/4125/3
 衝突判定
 
