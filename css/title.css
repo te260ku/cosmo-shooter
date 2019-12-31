@@ -1,0 +1,102 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,100,900);
+body {
+  background: #38c5b9;
+  color: #f7f7f7;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+}
+
+.title-section {
+  margin: 100px 0px;
+}
+
+.list-group {
+  color: black;
+}
+
+h1 {
+  color: white;
+  font-size: 1.25em;
+  font-weight: 900;
+}
+
+@media (min-width: 450px) {
+  h1 {
+    font-size: 1.75em;
+  }
+}
+
+@media (min-width: 760px) {
+  h1 {
+    font-size: 3.25em;
+  }
+}
+
+@media (min-width: 900px) {
+  h1 {
+    font-size: 5.25em;
+    margin: 0 0 1em;
+  }
+}
+
+.button-section {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -ms-flex-line-pack: center;
+      align-content: center;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  width: 60vw;
+  max-width: 1200px;
+  margin: 4em auto;
+}
+
+.button {
+  -webkit-box-flex: 1;
+      -ms-flex: 1 1 auto;
+          flex: 1 1 auto;
+  margin: 10px;
+  padding: 20px;
+  border: 2px solid #f7f7f7;
+  text-align: center;
+  text-transform: uppercase;
+  position: relative;
+  overflow: hidden;
+  -webkit-transition: .3s;
+  transition: .3s;
+}
+
+.button:after {
+  position: absolute;
+  -webkit-transition: .3s;
+  transition: .3s;
+  content: '';
+  width: 0;
+  left: 50%;
+  bottom: 0;
+  height: 3px;
+  background: #f7f7f7;
+  height: 120%;
+  left: -10%;
+  -webkit-transform: skewX(15deg);
+          transform: skewX(15deg);
+  z-index: -1;
+}
+
+.button:hover {
+  cursor: pointer;
+  color: #5bcaff;
+}
+
+.button:hover:after {
+  width: 100%;
+  left: 0;
+}
+/*# sourceMappingURL=title.css.map */

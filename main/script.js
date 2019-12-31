@@ -41,7 +41,7 @@ function init() {
 
    // カメラの生成
    camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.01, 10000);
-   camera.position.set(0, 1, 1);
+   camera.position.set(0, 1, 0);
    camera.lookAt(0, 0, 0);
    scene.add(camera);
    
@@ -57,7 +57,7 @@ function init() {
    // コントローラーの生成
    controls = new THREE.FirstPersonControls(camera, renderer.domElement);
    controls.lookSpeed = 0.1;
-   controls.movementSpeed = 0;
+   controls.movementSpeed = 1;
    controls.noFly = true;
    controls.lookVertical = true;
    controls.constrainVertical = false;
@@ -101,9 +101,9 @@ function init() {
    //                  node.receiveShadow = false;
    //              }
    //          });
-   //          gun.rotation.y.degreesToRadians(180);
+   //          gun.rotation.y += degreesToRadians(180);
    //          gun.scale.set(10,10,10);
-   //          gun.position.set(2, -1, -2.5);
+   //          gun.position.set(0.6, -0.5, -1.2);
 
    //          camera.add(gun);
    //      });
@@ -188,17 +188,17 @@ function render() {
    }
 
    // controlsのオンオフ
-   if (keyboard[87]) {
+   if (keyboard[81]) {
       if (!controlsFlag) {
          blocker.style.display = "none";
          controls.enabled = true;
          controlsFlag = true;
-         keyboard[87] = false;
+         keyboard[81] = false;
       } else {
          blocker.style.display = "";
          controls.enabled = false;
          controlsFlag = false;
-         keyboard[87] = false;
+         keyboard[81] = false;
       }
    }
 
