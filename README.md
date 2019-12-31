@@ -1,5 +1,11 @@
 # Three_FPS
 
+本開発環境
+
+```
+three_fps/main/index.html
+```
+
 ## デバッグの方法
 サーバー建てるときは以下のコマンドを叩く．
 

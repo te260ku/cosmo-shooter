@@ -4,10 +4,15 @@ var renderer;
 var controls;
 var emitter;
 
-var cube;
+var cube0;
+var cube1;
+var cube2;
 var cubes = [];
 
+var destroyFlag;
+
 var keyboard = {};
+var score = 0;
 
 window.onload = init;
 
@@ -96,16 +101,40 @@ camera.add(emitter);
 // var cubeGeo = new THREE.BoxGeometry(1, 1, 1);
 var cubeGeo = new THREE.SphereGeometry();
 var cubeMat = new THREE.MeshPhongMaterial({color:0x5555ff, wireframe:false});
-cube = new THREE.Mesh(cubeGeo, cubeMat);
-cube.position.set(10, 1, 0);
+cube0 = new THREE.Mesh(cubeGeo, cubeMat);
+cube0.position.set(10, 1, 0);
 
-if (cube.geometry.boundingSphere == null) { 
-   cube.geometry.computeBoundingSphere();
+if (cube0.geometry.boundingSphere == null) { 
+   cube0.geometry.computeBoundingSphere();
 } 
 //少しだけ小さめにする
-cube.geometry.boundingSphere.radius *= 1;
-cubes.push(cube);
-scene.add(cube);
+cube0.geometry.boundingSphere.radius *= 1;
+cube0.name = "cube-" + 0;
+cubes.push(cube0);
+scene.add(cube0);
+
+cube1 = new THREE.Mesh(cubeGeo, cubeMat);
+cube1.position.set(8, 5, 10);
+if (cube1.geometry.boundingSphere == null) { 
+   cube1.geometry.computeBoundingSphere();
+} 
+cube1.geometry.boundingSphere.radius *= 0.5;
+cube1.name = "cube-" + 1;
+cubes.push(cube1);
+scene.add(cube1);
+
+cube2 = new THREE.Mesh(cubeGeo, cubeMat);
+cube2.position.set(12, 2, 10);
+if (cube2.geometry.boundingSphere == null) { 
+   cube2.geometry.computeBoundingSphere();
+} 
+cube2.geometry.boundingSphere.radius *= 0.5;
+cube2.name = "cube-" + 2;
+cubes.push(cube2);
+scene.add(cube2);
+
+
+
 
 
 
@@ -126,7 +155,7 @@ function onMouseDown() {
   if (plasmaBall.geometry.BoundingSphere == null) { 
    plasmaBall.geometry.computeBoundingSphere();
    } 
-   // plasmaBall.geometry.boundingSphere.radius *= 0.8;
+   plasmaBall.geometry.boundingSphere.radius *= 0.8;
   plasmaBall.position.copy(emitter.getWorldPosition()); // start position - the tip of the weapon
   plasmaBall.quaternion.copy(camera.quaternion); // apply camera's quaternion
 
@@ -178,31 +207,64 @@ function render() {
   requestAnimationFrame(render);
   delta = clock.getDelta();
 
-  var box1 = cube.geometry.boundingSphere.clone();
-  box1.applyMatrix4(cube.matrixWorld);
+//   var box1 = cube.geometry.boundingSphere.clone();
+//   box1.applyMatrix4(cube.matrixWorld);
 
+
+//   var allChildren = scene.children;
 
   plasmaBalls.forEach(b => {
      // ローカルのz軸向きに飛ばす
     b.translateZ(-speed * delta); 
 
-    var box2 = b.geometry.boundingSphere.clone();
-    box2.applyMatrix4(b.matrixWorld);
+    var targetBullet = b.geometry.boundingSphere.clone();
+    targetBullet.applyMatrix4(b.matrixWorld);
+
 
 
   for (i=0; i<cubes.length; i++) {
-   var box1 = cubes[i].geometry.boundingSphere.clone();
-   box1.applyMatrix4(cube.matrixWorld);
-   if (box1.intersectsSphere(box2)) {
+
+   var targetCube = cubes[i].geometry.boundingSphere.clone();
+   targetCube.applyMatrix4(cubes[i].matrixWorld);
+
+   if (targetCube.intersectsSphere(targetBullet)) {
+      score ++;
       console.log("hit");
-      scene.remove(cubes[i]);
-      scene.remove(box1);
+      
+      t = scene.getObjectByName(cubes[i].name);
+      
+      scene.remove(t);
+      // t.visible = false;
+      scene.remove(targetCube);
       cubes.splice(i, 1);
-      scene.remove(box2);
+      // cubes[i] = "none"
+
+      scene.remove(targetBullet);
       scene.remove(b);
+      // break;
       // plasmaBalls.splice(i, 1);
    } 
+
   }
+//   while (i<cubes.length) {
+//    var targetCube = cubes[i].geometry.boundingSphere.clone();
+//    targetCube.applyMatrix4(cube.matrixWorld);
+
+//    if (targetCube.intersectsSphere(targetBullet)) {
+//       score ++;
+//       console.log("hit");
+//       scene.remove(cube);
+//       scene.remove(targetCube);
+//       cubes.splice(i, 1);
+
+//       scene.remove(targetBullet);
+//       scene.remove(b);
+//       break;
+//       // plasmaBalls.splice(i, 1);
+//    } 
+//    i++;
+//   }
+  
       
 
     
