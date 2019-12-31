@@ -5,7 +5,7 @@ var controls;
 var emitter;
 
 var cube;
-
+var cubes = [];
 
 var keyboard = {};
 
@@ -104,6 +104,7 @@ if (cube.geometry.boundingSphere == null) {
 } 
 //少しだけ小さめにする
 cube.geometry.boundingSphere.radius *= 1;
+cubes.push(cube);
 scene.add(cube);
 
 
@@ -182,18 +183,27 @@ function render() {
 
 
   plasmaBalls.forEach(b => {
-    b.translateZ(-speed * delta); // move along the local z-axis
+     // ローカルのz軸向きに飛ばす
+    b.translateZ(-speed * delta); 
 
     var box2 = b.geometry.boundingSphere.clone();
-  box2.applyMatrix4(b.matrixWorld);
+    box2.applyMatrix4(b.matrixWorld);
 
-   //  if (cube.geometry.boundingSphere.intersectsSphere(cube.geometry.boundingSphere)) {
-      if (box1.intersectsSphere(box2)) {
-       console.log("hit");
-      //  scene.remove(cube);
-      //  scene.remove(b);
-      //  plasmaBalls.shift();
-    } 
+
+  for (i=0; i<cubes.length; i++) {
+   var box1 = cubes[i].geometry.boundingSphere.clone();
+   box1.applyMatrix4(cube.matrixWorld);
+   if (box1.intersectsSphere(box2)) {
+      console.log("hit");
+      scene.remove(cubes[i]);
+      scene.remove(box1);
+      cubes.splice(i, 1);
+      scene.remove(box2);
+      scene.remove(b);
+      // plasmaBalls.splice(i, 1);
+   } 
+  }
+      
 
     
   });
