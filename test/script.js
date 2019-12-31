@@ -1,12 +1,13 @@
-
-
-var keyboard = {};
-
 var scene;
 var camera;
 var renderer;
 var controls;
 var emitter;
+
+var cube;
+
+
+var keyboard = {};
 
 window.onload = init;
 
@@ -19,7 +20,8 @@ function init() {
 
 scene = new THREE.Scene();
 camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.01, 10000);
-camera.position.set(0, 0, 1);
+camera.position.set(0, 1, 1);
+camera.lookAt(0, 0, 0);
 scene.add(camera);
 renderer = new THREE.WebGLRenderer({
   antialias: true
@@ -35,11 +37,9 @@ controls.movementSpeed = 0;
 controls.noFly = true;
 controls.lookVertical = true;
 controls.constrainVertical = false;
-// controls.verticalMin = 1.0;
-// controls.verticalMax = 2.0;
-// controls.lon = -150;
-// controls.lat = 120;
 
+ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
+scene.add(ambientLight);
 
 
 var background = new THREE.Mesh(new THREE.SphereGeometry(1000, 90, 45), new THREE.MeshBasicMaterial({
@@ -49,19 +49,69 @@ var background = new THREE.Mesh(new THREE.SphereGeometry(1000, 90, 45), new THRE
 scene.add(background);
 
 const axes = new THREE.AxisHelper(400);
+axes.position.set(0, 0, 0);
 scene.add(axes);
+
 
 var weapon = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 5), new THREE.MeshBasicMaterial({
   color: 0x5555ff
 }));
 weapon.position.set(2, -1, -2.5);
+// weapon.position.set(0, 0, -1.5);
 camera.add(weapon);
+
+
+
+// var mtlLoader = new THREE.MTLLoader();
+// mtlLoader.load("../demo/models/uziGold.mtl", function(materials){
+
+//      materials.preload();
+//      var objLoader = new THREE.OBJLoader();
+//      objLoader.setMaterials(materials);
+     
+//      objLoader.load("../demo/models/uziGold.obj", function(mesh){
+     
+//          mesh.traverse(function(node){
+//              if( node instanceof THREE.Mesh ){
+//                  node.castShadow = false;
+//                  node.receiveShadow = false;
+//              }
+//          });
+//          mesh.rotation.ydegreesToRadians
+//          mesh.scale.set(10,10,10);
+//          mesh.position.set(2, -1, -2.5);
+        
+//          camera.add(mesh);
+//      });
+
+// });
+
+
+
 emitter = new THREE.Object3D();
 emitter.position.set(2, -1, -5);
 camera.add(emitter);
 
+
+// var cubeGeo = new THREE.BoxGeometry(1, 1, 1);
+var cubeGeo = new THREE.SphereGeometry();
+var cubeMat = new THREE.MeshPhongMaterial({color:0x5555ff, wireframe:false});
+cube = new THREE.Mesh(cubeGeo, cubeMat);
+cube.position.set(10, 1, 0);
+
+if (cube.geometry.boundingSphere == null) { 
+   cube.geometry.computeBoundingSphere();
+} 
+//少しだけ小さめにする
+cube.geometry.boundingSphere.radius *= 1;
+scene.add(cube);
+
+
+
+
 render();
 }
+
 
 
 var plasmaBalls = [];
@@ -72,6 +122,10 @@ function onMouseDown() {
   let plasmaBall = new THREE.Mesh(new THREE.SphereGeometry(0.5, 8, 4), new THREE.MeshBasicMaterial({
     color: "aqua"
   }));
+  if (plasmaBall.geometry.BoundingSphere == null) { 
+   plasmaBall.geometry.computeBoundingSphere();
+   } 
+   // plasmaBall.geometry.boundingSphere.radius *= 0.8;
   plasmaBall.position.copy(emitter.getWorldPosition()); // start position - the tip of the weapon
   plasmaBall.quaternion.copy(camera.quaternion); // apply camera's quaternion
 
@@ -79,7 +133,8 @@ function onMouseDown() {
   setTimeout(function(){
    plasmaBall.alive = false;
      scene.remove(plasmaBall);
-   }, 1000);
+     plasmaBalls.shift();
+   }, 5000);
 
 
   scene.add(plasmaBall);
@@ -115,12 +170,32 @@ function render() {
          controlsFlag = false;
          keyboard[87] = false;
       }
-      
    }
+
+   
+
   requestAnimationFrame(render);
   delta = clock.getDelta();
+
+  var box1 = cube.geometry.boundingSphere.clone();
+  box1.applyMatrix4(cube.matrixWorld);
+
+
   plasmaBalls.forEach(b => {
     b.translateZ(-speed * delta); // move along the local z-axis
+
+    var box2 = b.geometry.boundingSphere.clone();
+  box2.applyMatrix4(b.matrixWorld);
+
+   //  if (cube.geometry.boundingSphere.intersectsSphere(cube.geometry.boundingSphere)) {
+      if (box1.intersectsSphere(box2)) {
+       console.log("hit");
+      //  scene.remove(cube);
+      //  scene.remove(b);
+      //  plasmaBalls.shift();
+    } 
+
+    
   });
 
   controls.update(delta);
@@ -135,6 +210,14 @@ function keyDown(event){
 
 function keyUp(event){
 	keyboard[event.keyCode] = false;
+}
+
+function degreesToRadians(degrees) {
+   return degrees * Math.PI / 180;
+}
+ 
+function radiansToDegrees(radians) {
+   return radians * 180 / Math.PI;
 }
 
 window.addEventListener('keydown', keyDown);

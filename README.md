@@ -27,6 +27,12 @@ create.jsを使った2Dのシューティングゲームチュートリアル一
 - https://github.com/saucecode/threejs-demos
 学習用のチュートリアル．これで作成したソースコードはdemo内に保存．
 
+- https://qiita.com/adrs2002/items/dd26fa318f7aa6aedc04
+逆引きtips．完成度が神．
+
+- https://discourse.threejs.org/t/collisions-two-objects/4125/3
+衝突判定
+
 1. cubeの表示とそのアニメーション
 2. 床の生成とキー入力に応じた移動，左右の回転，ボタンクリックによるワイヤーフレームの切り替え
 移動のベクトル制御とかはmicrosoftのチュートリアルを見て理論も押さえておく
