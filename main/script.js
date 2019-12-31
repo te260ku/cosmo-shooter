@@ -8,18 +8,26 @@ var cube0;
 var cube1;
 var cube2;
 var cubes = [];
+var cubeNum = 3;
+var cubePositionX = [10, 8, 12];
+var cubePositionY = [1, 5, 2];
+var cubePositionZ = [0, 10, 10];
+
 
 var destroyFlag;
 
 var keyboard = {};
 var score = 0;
 
+var blocker = document.getElementById('blocker');
+var scoreLabel = document.getElementById('score');
+scoreLabel.innerHTML = 0;
+var timeLabel = document.getElementById('time');
+timeLabel.innerHTML = 0;
+
 window.onload = init;
 
-// var blocker = document.getElementById('blocker');
-// blocker.addEventListener('click', function() {
-//    blocker.style.display = "none";
-// });
+
 
 function init() {
 
@@ -101,42 +109,43 @@ camera.add(emitter);
 // var cubeGeo = new THREE.BoxGeometry(1, 1, 1);
 var cubeGeo = new THREE.SphereGeometry();
 var cubeMat = new THREE.MeshPhongMaterial({color:0x5555ff, wireframe:false});
-cube0 = new THREE.Mesh(cubeGeo, cubeMat);
-cube0.position.set(10, 1, 0);
+for (i=0; i<cubeNum; i++) {
+   cube = new THREE.Mesh(cubeGeo, cubeMat);
+   cube.position.x = cubePositionX[i];
+   cube.position.y = cubePositionY[i];
+   cube.position.z = cubePositionZ[i];
 
-if (cube0.geometry.boundingSphere == null) { 
-   cube0.geometry.computeBoundingSphere();
+if (cube.geometry.boundingSphere == null) { 
+   cube.geometry.computeBoundingSphere();
 } 
 //少しだけ小さめにする
-cube0.geometry.boundingSphere.radius *= 1;
-cube0.name = "cube-" + 0;
-cubes.push(cube0);
-scene.add(cube0);
-
-cube1 = new THREE.Mesh(cubeGeo, cubeMat);
-cube1.position.set(8, 5, 10);
-if (cube1.geometry.boundingSphere == null) { 
-   cube1.geometry.computeBoundingSphere();
-} 
-cube1.geometry.boundingSphere.radius *= 0.5;
-cube1.name = "cube-" + 1;
-cubes.push(cube1);
-scene.add(cube1);
-
-cube2 = new THREE.Mesh(cubeGeo, cubeMat);
-cube2.position.set(12, 2, 10);
-if (cube2.geometry.boundingSphere == null) { 
-   cube2.geometry.computeBoundingSphere();
-} 
-cube2.geometry.boundingSphere.radius *= 0.5;
-cube2.name = "cube-" + 2;
-cubes.push(cube2);
-scene.add(cube2);
+cube.geometry.boundingSphere.radius *= 0.8;
+cube.name = "cube-" + [i];
+cubes.push(cube);
+scene.add(cube);
+}
 
 
 
+// cube1 = new THREE.Mesh(cubeGeo, cubeMat);
+// cube1.position.set(8, 5, 10);
+// if (cube1.geometry.boundingSphere == null) { 
+//    cube1.geometry.computeBoundingSphere();
+// } 
+// cube1.geometry.boundingSphere.radius *= 0.5;
+// cube1.name = "cube-" + 1;
+// cubes.push(cube1);
+// scene.add(cube1);
 
-
+// cube2 = new THREE.Mesh(cubeGeo, cubeMat);
+// cube2.position.set(12, 2, 10);
+// if (cube2.geometry.boundingSphere == null) { 
+//    cube2.geometry.computeBoundingSphere();
+// } 
+// cube2.geometry.boundingSphere.radius *= 0.5;
+// cube2.name = "cube-" + 2;
+// cubes.push(cube2);
+// scene.add(cube2);
 
 
 render();
@@ -192,10 +201,12 @@ function render() {
    // controlsのオンオフ
    if (keyboard[87]) {
       if (!controlsFlag) {
+         blocker.style.display = "none";
          controls.enabled = true;
          controlsFlag = true;
          keyboard[87] = false;
       } else {
+         blocker.style.display = "";
          controls.enabled = false;
          controlsFlag = false;
          keyboard[87] = false;
@@ -229,15 +240,15 @@ function render() {
 
    if (targetCube.intersectsSphere(targetBullet)) {
       score ++;
+      scoreLabel.innerHTML = score;
       console.log("hit");
       
       t = scene.getObjectByName(cubes[i].name);
       
       scene.remove(t);
-      // t.visible = false;
+
       scene.remove(targetCube);
       cubes.splice(i, 1);
-      // cubes[i] = "none"
 
       scene.remove(targetBullet);
       scene.remove(b);
@@ -246,28 +257,7 @@ function render() {
    } 
 
   }
-//   while (i<cubes.length) {
-//    var targetCube = cubes[i].geometry.boundingSphere.clone();
-//    targetCube.applyMatrix4(cube.matrixWorld);
 
-//    if (targetCube.intersectsSphere(targetBullet)) {
-//       score ++;
-//       console.log("hit");
-//       scene.remove(cube);
-//       scene.remove(targetCube);
-//       cubes.splice(i, 1);
-
-//       scene.remove(targetBullet);
-//       scene.remove(b);
-//       break;
-//       // plasmaBalls.splice(i, 1);
-//    } 
-//    i++;
-//   }
-  
-      
-
-    
   });
 
   controls.update(delta);
@@ -294,3 +284,8 @@ function radiansToDegrees(radians) {
 
 window.addEventListener('keydown', keyDown);
 window.addEventListener('keyup', keyUp);
+
+
+// blocker.addEventListener('click', function() {
+//    blocker.style.display = "none";
+// });
