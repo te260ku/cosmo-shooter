@@ -13,14 +13,15 @@
    
 </head>
 <body>
+   <div id="blocker">
    <!-- <div id="blocker" class="d-flex align-items-center">
  
       <button id="close">CLOSE</button>
-          <div id="carouselExampleIndicators" class="carousel slide mx-auto" data-ride="carousel">
+          <div id="carousel" class="carousel slide mx-auto" data-ride="carousel">
             <ol class="carousel-indicators">
-              <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-              <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-              <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+              <li data-target="#carousel" data-slide-to="0" class="active"></li>
+              <li data-target="#carousel" data-slide-to="1"></li>
+              <li data-target="#carousel" data-slide-to="2"></li>
             </ol>
             
             <div class="carousel-inner">
@@ -38,11 +39,11 @@
               </div>
             </div>
 
-            <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+            <a class="carousel-control-prev" href="#carousel" role="button" data-slide="prev">
               <span class="carousel-control-prev-icon" aria-hidden="true"></span>
               <span class="sr-only">Previous</span>
             </a>
-            <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+            <a class="carousel-control-next" href="#carousel" role="button" data-slide="next">
               <span class="carousel-control-next-icon" aria-hidden="true"></span>
               <span class="sr-only">Next</span>
             </a>
@@ -76,7 +77,7 @@
 
 
    <div class="button-section">
-      <div class="button">START</div>
+      <div class="button" id="start-button">START</div>
       <div class="button" data-toggle="modal" data-target="#exampleModal">TUTORIAL</div>
       <div class="button">SETTING</div>
  
@@ -89,17 +90,17 @@
        <div class="modal-header">
          <h5 class="modal-title text-white" id="exampleModalLabel">TUTORIAL</h5>
          <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close"> -->
-           <span aria-hidden="true">&times;</span>
+           <!-- <span aria-hidden="true">&times;</span> -->
          </button>
        </div>
        <div class="modal-body">
 
 
-         <div id="carouselExampleIndicators" class="carousel slide mx-auto" data-ride="carousel">
+         <div id="carousel" class="carousel slide mx-auto" data-ride="carousel">
             <ol class="carousel-indicators">
-              <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-              <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-              <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+              <li data-target="#carousel" data-slide-to="0" class="active"></li>
+              <li data-target="#carousel" data-slide-to="1"></li>
+              <li data-target="#carousel" data-slide-to="2"></li>
             </ol>
             
             <div class="carousel-inner">
@@ -117,11 +118,11 @@
               </div>
             </div>
 
-            <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+            <a class="carousel-control-prev" href="#carousel" role="button" data-slide="prev">
               <span class="carousel-control-prev-icon" aria-hidden="true"></span>
               <span class="sr-only">Previous</span>
             </a>
-            <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+            <a class="carousel-control-next" href="#carousel" role="button" data-slide="next">
               <span class="carousel-control-next-icon" aria-hidden="true"></span>
               <span class="sr-only">Next</span>
             </a>
@@ -137,8 +138,11 @@
    </div>
  </div>
 
-    
 
+   </div>
+
+ <div id="stage"></div>
+ <script src="https://threejs.org/build/three.min.js"></script>
     <script src="title.js"></script>
 </body>
 </html>

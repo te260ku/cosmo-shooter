@@ -26,7 +26,7 @@ var timeBar = document.getElementById('timeBar');
 // timeBar.max = "100";
 // timeBar.value = timeBar.max;
 var msg = document.getElementById("msg");
-msg.innerHTML = "Press W to Start";
+msg.innerHTML = "Press Q to Start";
 
 // オーディオ関連
 // var shotAudio = new Audio("../audio/ShotAudio.mp3");
@@ -50,6 +50,7 @@ function init() {
       antialias: true
    });
    renderer.setSize(window.innerWidth, window.innerHeight);
+   renderer.setPixelRatio(window.devicePixelRatio);
    renderer.setClearColor(new THREE.Color(0xEEEEEE));
    var stage = document.getElementById("stage");
    stage.appendChild(renderer.domElement);

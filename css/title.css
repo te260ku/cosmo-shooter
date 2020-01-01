@@ -1,6 +1,7 @@
 @import url(https://fonts.googleapis.com/css?family=Roboto:400,100,900);
 body {
-  background: #38c5b9;
+  /* background: #38c5b9; */
+  background: none;  
   color: #f7f7f7;
   font-family: 'Roboto', sans-serif;
   font-weight: 400;
@@ -11,6 +12,10 @@ body {
 
 .carousel-item img {
   margin: auto;
+}
+
+.modal-backdrop {
+  z-index: -999;
 }
 
 

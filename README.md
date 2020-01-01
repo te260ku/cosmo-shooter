@@ -41,6 +41,9 @@ create.jsを使った2Dのシューティングゲームチュートリアル一
 - https://discourse.threejs.org/t/collisions-two-objects/4125/3
 衝突判定
 
+- https://qiita.com/39_isao/items/e7b204042aea2ce8c2ba
+タイトルページ用のパーティクル．
+
 1. cubeの表示とそのアニメーション
 2. 床の生成とキー入力に応じた移動，左右の回転，ボタンクリックによるワイヤーフレームの切り替え
 移動のベクトル制御とかはmicrosoftのチュートリアルを見て理論も押さえておく
