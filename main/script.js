@@ -68,10 +68,18 @@ function init() {
    scene.add(ambientLight);
 
    // フィールドの生成
-   const background = new THREE.Mesh(new THREE.SphereGeometry(1000, 90, 45), new THREE.MeshBasicMaterial({
+   var backgroundGeo = new THREE.SphereGeometry(1000, 90, 45);
+   // var textureLoader = new THREE.TextureLoader();
+   // backgroundTex = textureLoader.load("background.jpeg");
+   
+   var backgroundMat = new THREE.MeshBasicMaterial({
       color: "gray",
-      wireframe: true
-   }));
+      // color:0xffffff, 
+      wireframe: true, 
+      // map: backgroundTex
+   })
+
+   const background = new THREE.Mesh(backgroundGeo, backgroundMat);
    scene.add(background);
 
    const axes = new THREE.AxisHelper(400);
@@ -83,7 +91,6 @@ function init() {
       color: 0x5555ff
    }));
    weapon.position.set(2, -1, -2.5);
-   // weapon.position.set(0, 0, -1.5);
    camera.add(weapon);
 
 
@@ -180,13 +187,17 @@ var clock = new THREE.Clock();
 var delta = 0;
 
 var controlsFlag = false;
+var step = 0;
 
-// 定義したその場で即実行される即時関数
 function render() {
    // 弾丸の発射
    if (keyboard[32] && canShoot) {
       onMouseDown();
    }
+
+   step += 0.01;
+   cubes[0].position.z = 10 + (10*(Math.cos(step)));
+   cubes[0].position.y = 1.5 + (10*Math.abs(Math.sin(step)));
 
    // controlsのオンオフ
    if (keyboard[81]) {
