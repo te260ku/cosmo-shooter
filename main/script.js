@@ -82,6 +82,7 @@ function init() {
    const background = new THREE.Mesh(backgroundGeo, backgroundMat);
    scene.add(background);
 
+   // デバッグ用
    const axes = new THREE.AxisHelper(400);
    axes.position.set(0, 0, 0);
    scene.add(axes);
@@ -125,12 +126,18 @@ function init() {
    camera.add(emitter);
 
 
+   // ----敵の生成------------------------------------
+
    // var cubeGeo = new THREE.BoxGeometry(1, 1, 1);
    var cubeGeo = new THREE.SphereGeometry();
    // var cubeMat = new THREE.MeshPhongMaterial({color:0x5555ff, wireframe:false});
    var cubeMat = new THREE.MeshNormalMaterial({ wireframe: false });
+
+   
    for (i = 0; i < cubeNum; i++) {
       cube = new THREE.Mesh(cubeGeo, cubeMat);
+
+      // 位置はvector3で指定する
       cube.position.x = cubePositionX[i];
       cube.position.y = cubePositionY[i];
       cube.position.z = cubePositionZ[i];
@@ -195,6 +202,7 @@ function render() {
       onMouseDown();
    }
 
+   // sphereを動かしているところ
    step += 0.01;
    cubes[0].position.z = 10 + (10*(Math.cos(step)));
    cubes[0].position.y = 1.5 + (10*Math.abs(Math.sin(step)));

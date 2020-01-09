@@ -47,8 +47,29 @@ create.jsを使った2Dのシューティングゲームチュートリアル一
 - https://ics.media/tutorial-three/class/
 敵のクラス化
 
+- https://qiita.com/o_tyazuke/items/5d407823cf637bc564b4
+メッシュの複製．mergeするやつ
+
+```
+for(var i=0; i<10; i++){
+  for(var j=0; j<10; j++){
+    for(var k=0; k<10; k++){
+      meshItem.position.x = k*6 + k*1;
+      meshItem.position.y = j*6 + j*1;
+      meshItem.position.z = i*6 + i*1;
+
+      geometry.mergeMesh(meshItem);
+    }
+  }
+}
+```
+
 - https://www.creativebloq.com/web-design/build-basic-combat-game-threejs-101517540
 スコープの表示
+
+- https://qiita.com/ut0n/items/4abc77ac670463f9b657
+敵のランダム移動
+
 
 1. cubeの表示とそのアニメーション
 2. 床の生成とキー入力に応じた移動，左右の回転，ボタンクリックによるワイヤーフレームの切り替え
