@@ -44,6 +44,12 @@ create.jsを使った2Dのシューティングゲームチュートリアル一
 - https://qiita.com/39_isao/items/e7b204042aea2ce8c2ba
 タイトルページ用のパーティクル．
 
+- https://ics.media/tutorial-three/class/
+敵のクラス化
+
+- https://www.creativebloq.com/web-design/build-basic-combat-game-threejs-101517540
+スコープの表示
+
 1. cubeの表示とそのアニメーション
 2. 床の生成とキー入力に応じた移動，左右の回転，ボタンクリックによるワイヤーフレームの切り替え
 移動のベクトル制御とかはmicrosoftのチュートリアルを見て理論も押さえておく
