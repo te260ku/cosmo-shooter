@@ -1,7 +1,7 @@
 @import url(https://fonts.googleapis.com/css?family=Roboto:400,100,900);
 body {
-  background: #38c5b9;
-  /* background: none;   */
+  /* background: #38c5b9; */
+  background: none;  
   color: #f7f7f7;
   font-family: 'Roboto', sans-serif;
   font-weight: 400;
@@ -20,7 +20,7 @@ body {
 
 
 /* blockerが重畳されてるので，パーティクルなしverはここをコメントアウトする */
-/* 
+
 #blocker {
 	position: absolute;
 	width: 100%;
@@ -29,7 +29,7 @@ body {
   background-color: rgba(0, 0, 0, 0.7);
   z-index: 1;
 
-} */
+}
 
 		
 #instructions {
@@ -105,14 +105,14 @@ h1 {
       flex-wrap: wrap;
   width: 60vw;
   max-width: 1200px;
-  margin: 4em auto;
+  margin: 6em auto;
 }
 
 .button {
   -webkit-box-flex: 1;
       -ms-flex: 1 1 auto;
           flex: 1 1 auto;
-  margin: 10px;
+  margin: 20px;
   padding: 20px;
   border: 2px solid #f7f7f7;
   text-align: center;

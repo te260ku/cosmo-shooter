@@ -100,7 +100,7 @@
 	appearance: none;
 	height: 10px;
 	width: 75%;
-	/* vertical-align: -0.2em; */
+	
  }
  
  #timeBar::-webkit-progress-bar {
@@ -110,3 +110,11 @@
  #timeBar::-webkit-progress-value {
 	background-color: #00cc00;
  }
+
+ .btn {
+	 font-size: 1em;
+	 color: #ffffff;
+	 border: 1px solid white;
+ }
+
+ 

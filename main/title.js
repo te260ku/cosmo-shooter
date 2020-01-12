@@ -34,7 +34,7 @@ function onClick() {
 
    // テクスチャのロード
    loader = new THREE.TextureLoader();
-   loader.load('particle.jpeg', function(texture) {
+   loader.load('particle_texture.png', function(texture) {
      createParticles(texture);
      render();
    });
@@ -60,10 +60,11 @@ function onClick() {
      
      particleMat = new THREE.PointsMaterial({
        map: texture,
-       size: 3, // サイズ
-       blending: THREE.AdditiveBlending, // ブレンドモード(加算)
-       transparent: true, // 透過true
-       depthTest: false // 物体が重なった時に後ろにあるものを描画するかしないか
+       size: 3, 
+       blending: THREE.AdditiveBlending, 
+       transparent: true,
+       // 物体が重なった時に後ろにあるものを描画するかしないか 
+       depthTest: false 
      });
 
      particles = new THREE.Points(particleGeo, particleMat);

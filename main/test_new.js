@@ -10,14 +10,12 @@ var cubeNum = 3;
 var cubePositionX = [10, 8, 12];
 var cubePositionY = [1, 5, 2];
 var cubePositionZ = [0, 10, 10];
-var cubePositions = {};
 
 // ゲームシステム関連
 var time = 0;
 var limitTime = 100;
 var score = 0;
 var keyboard = {};
-var endFlag = false;
 
 // UI関連
 var blocker = document.getElementById('blocker');
@@ -29,8 +27,6 @@ var timeBar = document.getElementById('timeBar');
 // timeBar.value = timeBar.max;
 var msg = document.getElementById("msg");
 msg.innerHTML = "Press Q to Start";
-
-
 
 // オーディオ関連
 // var shotAudio = new Audio("../audio/ShotAudio.mp3");
@@ -48,7 +44,7 @@ function init() {
    camera.position.set(0, 1, 0);
    camera.lookAt(0, 0, 0);
    scene.add(camera);
-   
+
    // レンダラーの生成
    renderer = new THREE.WebGLRenderer({
       antialias: true
@@ -71,40 +67,20 @@ function init() {
    ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
    scene.add(ambientLight);
 
-
    // フィールドの生成
-   const geometry_f = new THREE.SphereGeometry(100, 100, 100);
-   geometry_f.scale(-1, 1, 1);
+   var backgroundGeo = new THREE.SphereGeometry(1000, 90, 45);
+   // var textureLoader = new THREE.TextureLoader();
+   // backgroundTex = textureLoader.load("background.jpeg");
 
-   //テクスチャ画像を読み込み
-   const loader_f = new THREE.TextureLoader();
-   const texture_f = loader_f.load('test.jpg');
+   var backgroundMat = new THREE.MeshBasicMaterial({
+      color: "gray",
+      // color:0xffffff,
+      wireframe: true,
+      // map: backgroundTex
+   })
 
-   //球体のマテリアルを生成
-   const material_f = new THREE.MeshBasicMaterial({
-     map: texture_f
-   });
-
-   //球体を生成
-   const sphere_f = new THREE.Mesh(geometry_f, material_f);
-
-   scene.add(sphere_f);
-
-
-   
-   // var backgroundGeo = new THREE.SphereGeometry(1000, 90, 45);
-   // // var textureLoader = new THREE.TextureLoader();
-   // // backgroundTex = textureLoader.load("background.jpeg");
-   
-   // var backgroundMat = new THREE.MeshBasicMaterial({
-   //    color: "gray",
-   //    // color:0xffffff, 
-   //    wireframe: true, 
-   //    // map: backgroundTex
-   // })
-
-   // const background = new THREE.Mesh(backgroundGeo, backgroundMat);
-   // scene.add(background);
+   const background = new THREE.Mesh(backgroundGeo, backgroundMat);
+   scene.add(background);
 
    // デバッグ用
    const axes = new THREE.AxisHelper(400);
@@ -157,9 +133,7 @@ function init() {
    // var cubeMat = new THREE.MeshPhongMaterial({color:0x5555ff, wireframe:false});
    var cubeMat = new THREE.MeshNormalMaterial({ wireframe: false });
 
-   // var shader = FresnelShader;
 
-   
    for (i = 0; i < cubeNum; i++) {
       cube = new THREE.Mesh(cubeGeo, cubeMat);
 
@@ -167,7 +141,6 @@ function init() {
       cube.position.x = cubePositionX[i];
       cube.position.y = cubePositionY[i];
       cube.position.z = cubePositionZ[i];
-      
 
       if (cube.geometry.boundingSphere == null) {
          cube.geometry.computeBoundingSphere();
@@ -178,8 +151,6 @@ function init() {
       cubes.push(cube);
       scene.add(cube);
    }
-
-   // -------------------------------------------------
 
    render();
 }
@@ -199,9 +170,8 @@ function onMouseDown() {
       bullet.geometry.computeBoundingSphere();
    }
    bullet.geometry.boundingSphere.radius *= 0.8;
-   // 始点 - 銃の先
-   bullet.position.copy(emitter.getWorldPosition()); 
-   bullet.quaternion.copy(camera.quaternion); 
+   bullet.position.copy(emitter.getWorldPosition()); // start position - the tip of the weapon
+   bullet.quaternion.copy(camera.quaternion);
 
    bullet.alive = true;
    setTimeout(function () {
@@ -219,9 +189,7 @@ function onMouseDown() {
    }, 1000);
 }
 
-// 弾丸のスピード
 var speed = 50;
-// 時間管理
 var clock = new THREE.Clock();
 var delta = 0;
 
@@ -235,25 +203,118 @@ function render() {
    }
 
    // sphereを動かしているところ
-   step += 0.01;
-   cubes[0].position.z = 10 + (10*(Math.cos(step)));
-   cubes[0].position.y = 1.5 + (10*Math.abs(Math.sin(step)));
+   // step += 0.02;
+   // cubes[0].position.z = 30 - (60*(Math.cos(step)));
+   // cubes[0].position.y = 0 + (-10*Math.abs(Math.sin(step)));
+   //
+   // step += 0.0005;
+   // cubes[1].position.z = 60 + (-10*(Math.cos(step)));
+   // cubes[1].position.y = 60 + (-10*Math.abs(Math.sin(step)));
+   //
+   // step += 0.01;
+   // cubes[2].position.z = 50 + (10*(Math.cos(step)));
+   // cubes[2].position.y = 1.5 + (10*Math.abs(Math.sin(step)));
+
+
+ // const block_width = 5; // ブロックの横の長さ
+ // const block_height = 5; // ブロックの縦の長さ
+ // const block_num = 300; // ブロックの数
+ // const min_speed = 1; // ブロックの最遅スピード
+ // const max_speed = 10; // ブロックの最速スピード
+ //
+ // const width = document.body.clientWidth;
+ // const height = document.body.clientHeight;
+ //
+ // const renderer = new THREE.WebGLRenderer();
+ // renderer.setSize(width, height);
+ // renderer.setClearColor(0xffffff, 1);
+ // renderer.domElement.id = 'console';
+ // renderer.domElement.style.zIndex = 0;
+ // document.body.appendChild(renderer.domElement);
+ // renderer.clear();
+ //
+ // const camera = new THREE.PerspectiveCamera(90, width / height, 0.1, 500);
+ // camera.position.z = height / 2;
+ //
+ // const scene = new THREE.Scene();
+ //
+ // const geometry = new THREE.PlaneGeometry(block_width, block_height);
+ //
+ // let rect = [];
+ // for (var i = 0; i < block_num; i++) {
+ //   var color = "0x" + Math.floor(Math.random() * 16777215).toString(16);
+ //   // var color = "0xffffff";
+ //   var material = new THREE.MeshBasicMaterial({
+ //     color: Number(color)
+ //   });
+ //
+ //   rect.push(new THREE.Mesh(geometry, material));
+ // }
+ //
+ // for (var i in rect) scene.add(rect[i]);
+ //
+ //
+ //
+ // let x = [];
+ // let y = [];
+ // let dx = [];
+ // let dy = [];
+ //
+ // const min_pos_x = -(Number(width) / 2);
+ // const max_pos_x = (Number(width) / 2);
+ // const min_pos_y = -(Number(height) / 2);
+ // const max_pos_y = (Number(height) / 2);
+ //
+ // for (var i = 0; i < block_num; i++) {
+ //   x.push(Math.floor(Math.random() * (max_pos_x + 1 - min_pos_x)) + min_pos_x);
+ //   y.push(Math.floor(Math.random() * (max_pos_y + 1 - min_pos_y)) + min_pos_y);
+ //   dx.push(Math.floor(Math.random() * (max_speed + 1 - min_speed)) + min_speed);
+ //   dy.push(Math.floor(Math.random() * (max_speed + 1 - min_speed)) + min_speed);
+ // }
+ //
+ // (function render() {
+ //
+ //   requestAnimationFrame(render);
+ //   renderer.render(scene, camera);
+ //
+ //   for (var i in rect) {
+ //     x[i] += dx[i];
+ //     y[i] += dy[i];
+ //     if (x[i] > (width / 2 - (block_width / 2)) || x[i] < (-width / 2  + (block_width / 2))) {
+ //       dx[i] = -dx[i];
+ //       // if (dx[i] < 0) dx[i] = dx[i] - 1;
+ //       // else dx[i] = dx[i] + 1;
+ //       x[i] += dx[i];
+ //     }
+ //     if (y[i] > (height / 2 - (block_height / 2)) || y[i] < (-height / 2  + (block_height / 2))) {
+ //       dy[i] = -dy[i];
+ //       // if (dy[i] < 0) dy[i] = dy[i] - 1;
+ //       // else dy[i] = dy[i] + 1;
+ //       y[i] += dy[i];
+ //     }
+ //
+ //     rect[i].position.x = x[i];
+ //     rect[i].position.y = y[i];
+ //   }
+ //
+ // })();
+
+
+
+
 
    // controlsのオンオフ
    if (keyboard[81]) {
-      // まだゲームが終了していなかったら
-      if (!endFlag) {
-         if (!controlsFlag) {
-            blocker.style.display = "none";
-            controls.enabled = true;
-            controlsFlag = true;
-            keyboard[81] = false;
-         } else {
-            blocker.style.display = "";
-            controls.enabled = false;
-            controlsFlag = false;
-            keyboard[81] = false;
-         }
+      if (!controlsFlag) {
+         blocker.style.display = "none";
+         controls.enabled = true;
+         controlsFlag = true;
+         keyboard[81] = false;
+      } else {
+         blocker.style.display = "";
+         controls.enabled = false;
+         controlsFlag = false;
+         keyboard[81] = false;
       }
    }
 
@@ -276,8 +337,9 @@ function render() {
    //    msg.style.color = "red";
    //    controls.enabled = false;
    //    controlsFlag = false;
-   //    endFlag = true;
    //   }
+
+
 
 
    bullets.forEach(b => {
@@ -318,7 +380,6 @@ function render() {
    controls.update(delta);
    renderer.render(scene, camera);
 }
-
 
 
 // キー入力に応じてflagを立てる
