@@ -16,8 +16,11 @@ var spherePositionZ = [0, 10, 10, 0];
 var spherePositions = {};
 
 // ゲームシステム関連
+var startFlag = false;
+var baseVol = 0.5; 
+var fadeSpeed = 3000; 
 var time = 0;
-var limitTime = 100;
+var limitTime = 10;
 var score = 0;
 var keyboard = {};
 var endFlag = false;
@@ -55,12 +58,17 @@ msg.innerHTML = "Press Q to Start";
 // オーディオ関連
 // var shotAudio = new Audio("../audio/ShotAudio.mp3");
 // var StruckAudio = new Audio("../audio/StruckAudio.mp3");
+var audio = new Audio("../audio/main_bgm.mp3");
+// bgm.loop = true;
+
+
+
 
 
 window.onload = init;
 
 function init() {
-
+   
    scene = new THREE.Scene();
 
    // カメラの生成
@@ -100,7 +108,7 @@ function init() {
 
    // //テクスチャ画像を読み込み
    // const loader_f = new THREE.TextureLoader();
-   // const texture_f = loader_f.load('test.jpg');
+   // const texture_f = loader_f.load("back.JPG");
 
    // //球体のマテリアルを生成
    // const material_f = new THREE.MeshBasicMaterial({
@@ -113,7 +121,7 @@ function init() {
    // scene.add(sphere_f);
 
 
-   
+
    var backgroundGeo = new THREE.SphereGeometry(1000, 90, 45);
    // var textureLoader = new THREE.TextureLoader();
    // backgroundTex = textureLoader.load("background.jpeg");
@@ -124,7 +132,6 @@ function init() {
       wireframe: true, 
       // map: backgroundTex
    })
-
    const background = new THREE.Mesh(backgroundGeo, backgroundMat);
    scene.add(background);
 
@@ -238,6 +245,7 @@ var bullets = [];
 var canShoot = true;
 
 function onMouseDown() {
+
    // shotAudio.play();
    let bullet = new THREE.Mesh(new THREE.SphereGeometry(2, 8, 4), new THREE.MeshBasicMaterial({
       color: "aqua"
@@ -281,6 +289,26 @@ function render() {
       onMouseDown();
    }
 
+   if (score == sphereNum) {
+      blocker.style.display = "";
+         msg.innerHTML = "CLEAR"
+         msg.style.color = "red";
+         controls.enabled = false;
+         controlsFlag = false;
+   
+   
+         var end_func = setInterval(function() {
+            audio.volume = audio.volume - (baseVol / 100);
+            if(audio.volume <= (baseVol / 100)) {
+               audio.volume = baseVol;
+               audio.pause();
+               clearInterval(end_func);
+            }
+      }, fadeSpeed * baseVol / 100);
+   
+         endFlag = true;
+   }
+
    // // sphereを動かしているところ
    // step += 0.01;
    // spheres[0].position.z = 10 + (10*(Math.cos(step)));
@@ -317,6 +345,26 @@ function render() {
 
    // controlsのオンオフ
    if (keyboard[81]) {
+      if (!startFlag) {
+
+
+
+
+         audio.volume = 0;
+    audio.play();
+    var start_func = setInterval(function() {
+        audio.volume = audio.volume + (baseVol / 100);
+        if(audio.volume >= baseVol - (baseVol / 100)) {
+            audio.volume = baseVol;
+            clearInterval(start_func);
+        }
+    }, fadeSpeed * baseVol / 100);
+
+
+
+         startFlag = true;
+      }
+      
       // まだゲームが終了していなかったら
       if (!endFlag) {
          if (!controlsFlag) {
@@ -339,21 +387,32 @@ function render() {
    delta = clock.getDelta();
 
 
+if (!endFlag) {
+  // timer
+  time += delta;
+  //   setTimeout
+    timeBar.value-=delta;
 
-   //   // timer
-   //   time += delta;
-   // //   setTimeout
-   //   timeBar.value-=delta;
+    // timeの単位はs
+    if (time > limitTime) {
+     var end_func = setInterval(function() {
+        audio.volume = audio.volume - (baseVol / 100);
+        if(audio.volume <= (baseVol / 100)) {
+           audio.volume = baseVol;
+           audio.pause();
+           clearInterval(end_func);
+        }
+  }, fadeSpeed * baseVol / 100);
+     blocker.style.display = "";
+     msg.innerHTML = "GAMEOVER"
+     msg.style.color = "red";
+     controls.enabled = false;
+     controlsFlag = false;
 
-   //   // timeの単位はs
-   //   if (time > limitTime) {
-   //    blocker.style.display = "";
-   //    msg.innerHTML = "GAMEOVER"
-   //    msg.style.color = "red";
-   //    controls.enabled = false;
-   //    controlsFlag = false;
-   //    endFlag = true;
-   //   }
+     endFlag = true;
+    }
+}
+   
 
 
    bullets.forEach(b => {
@@ -425,3 +484,6 @@ function windowResize() {
 window.addEventListener('keydown', keyDown);
 window.addEventListener('keyup', keyUp);
 window.addEventListener('resize', windowResize, false);
+
+
+

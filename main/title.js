@@ -5,9 +5,12 @@ function onClick() {
    window.location.href = "index.html";
 }
 
+var audio = new Audio("../audio/main_bgm.mp3");
+audio.loop = true;
 
 (function() {
 
+  audio.play();
    var scene;
    var camera;
    var renderer;
