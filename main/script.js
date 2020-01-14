@@ -24,29 +24,29 @@ var spherePositions = {};
 
 // ゲームシステム関連
 var startFlag = false;
-var baseVol = 0.5; 
-var fadeSpeed = 3000; 
+var baseVol = 0.5;
+var fadeSpeed = 3000;
 var time = 0;
 var limitTime = 10;
 var score = 0;
 var keyboard = {};
 var endFlag = false;
-const min_speed = 0.5;
-const max_speed = 0.5;
+const min_speed = 0.1;
+const max_speed = 0.1;
 const sphere_width = 10;
 const sphere_height = 10;
 let x = [];
-    let y = [];
-    let z = [];
-    let dx = [];
-    let dy = [];
-    let dz = [];
-    const min_pos_x = -(Number(500) / 2);
-    const max_pos_x = (Number(500) / 2);
-    const min_pos_y = -(Number(500) / 2);
-    const max_pos_y = (Number(500) / 2);
-    const min_pos_z = -(Number(500) / 2);
-    const max_pos_z = (Number(500) / 2);
+let y = [];
+let z = [];
+let dx = [];
+let dy = [];
+let dz = [];
+const min_pos_x = -(Number(500) / 2);
+const max_pos_x = (Number(500) / 2);
+const min_pos_y = -(Number(500) / 2);
+const max_pos_y = (Number(500) / 2);
+const min_pos_z = -(Number(500) / 2);
+const max_pos_z = (Number(500) / 2);
 
 
 // UI関連
@@ -74,7 +74,7 @@ var audio = new Audio("../audio/main_bgm.mp3");
 window.onload = init;
 
 function init() {
-   
+
    scene = new THREE.Scene();
 
    // カメラの生成
@@ -82,7 +82,7 @@ function init() {
    camera.position.set(0, 1, 0);
    camera.lookAt(0, 0, 0);
    scene.add(camera);
-   
+
    // レンダラーの生成
    renderer = new THREE.WebGLRenderer({
       antialias: true
@@ -107,7 +107,7 @@ function init() {
    scene.add(ambientLight);
    light = new THREE.SpotLight();
    light.position.set(0, 0, 1000);
-   light.castShadow = true; 
+   light.castShadow = true;
    light.shadowCameraVisible = true;
    scene.add(light);
 
@@ -117,7 +117,7 @@ function init() {
    // weapon.position.set(2, -1, -2.5);
    // camera.add(weapon);
 
-   
+
    // weapon
    // var mtlLoader = new THREE.MTLLoader();
    // mtlLoader.load("../demo/models/uziGold.mtl", function(materials){
@@ -163,7 +163,7 @@ function init() {
 
    //球体のマテリアルを生成
    const material_f = new THREE.MeshBasicMaterial({
-     map: texture_f
+      map: texture_f
    });
 
    //球体を生成
@@ -204,11 +204,11 @@ function init() {
    var backgroundGeo = new THREE.SphereGeometry(500, 45, 45);
    // var textureLoader = new THREE.TextureLoader();
    // backgroundTex = textureLoader.load("background.jpeg");
-   
+
    var backgroundMat = new THREE.MeshBasicMaterial({
       color: "gray",
       // color:0xffffff, 
-      wireframe: true, 
+      wireframe: true,
       // map: backgroundTex
    })
    const background = new THREE.Mesh(backgroundGeo, backgroundMat);
@@ -220,7 +220,7 @@ function init() {
    scene.add(axes);
 
 
-   
+
 
    // ----敵の生成------------------------------------
 
@@ -232,14 +232,14 @@ function init() {
    // });
 
    var textureLoader = new THREE.TextureLoader();
-            var texture = textureLoader.load("../img/metal-rust.jpg");
-            var sphereMat = new THREE.MeshPhongMaterial();
-            sphereMat.map = texture;
+   var texture = textureLoader.load("../img/metal-rust.jpg");
+   var sphereMat = new THREE.MeshPhongMaterial();
+   sphereMat.map = texture;
 
-            
 
-   
-   
+
+
+
    // mtlLoader.load("./model/glass/materials.mtl", function(materials){
 
    //      materials.preload();
@@ -261,7 +261,7 @@ function init() {
    //          });
 
    //          for (var i = 0; i < sphereNum; i++) {
-               
+
    //             glass.name = "sphere-" + [i];
    //             spheres.push(glass);
    //             scene.add(glass);
@@ -284,15 +284,15 @@ function init() {
    //    vertexShader: shader.vertexShader,
    //    fragmentShader: shader.fragmentShader, 
    // } );
-   
+
    // subset
    // var sphereGeo = new THREE.SphereGeometry();
    // var sphereMat = new THREE.MeshPhongMaterial({color:0x5555ff, wireframe:false});
 
-   
 
 
-   
+
+
    // すべて生成してシーンに追加
    for (var i = 0; i < sphereNum; i++) {
       sphere = new THREE.Mesh(sphereGeo, sphereMat);
@@ -307,16 +307,16 @@ function init() {
 
 
 
-    for (var i = 0; i < sphereNum; i++) {
+   for (var i = 0; i < sphereNum; i++) {
       x.push(Math.floor(Math.random() * (max_pos_x + 1 - min_pos_x)) + min_pos_x);
       y.push(Math.floor(Math.random() * (max_pos_y + 1 - min_pos_y)) + min_pos_y);
       z.push(Math.floor(Math.random() * (max_pos_z + 1 - min_pos_z)) + min_pos_z);
       dx.push(Math.floor(Math.random() * (max_speed + 1 - min_speed)) + min_speed);
       dy.push(Math.floor(Math.random() * (max_speed + 1 - min_speed)) + min_speed);
       dz.push(Math.floor(Math.random() * (max_speed + 1 - min_speed)) + min_speed);
-  }
+   }
 
-   
+
    // for (i = 0; i < sphereNum; i++) {
    //    sphere = new THREE.Mesh(sphereGeo, sphereMat);
 
@@ -324,7 +324,7 @@ function init() {
    //    sphere.position.x = spherePositionX[i];
    //    sphere.position.y = spherePositionY[i];
    //    sphere.position.z = spherePositionZ[i];
-      
+
 
    //    if (sphere.geometry.boundingSphere == null) {
    //       sphere.geometry.computeBoundingSphere();
@@ -358,8 +358,8 @@ function onMouseDown() {
    }
    bullet.geometry.boundingSphere.radius *= bulletRadius;
    // 始点 - 銃の先
-   bullet.position.copy(emitter.getWorldPosition()); 
-   bullet.quaternion.copy(camera.quaternion); 
+   bullet.position.copy(emitter.getWorldPosition());
+   bullet.quaternion.copy(camera.quaternion);
 
    bullet.alive = true;
    setTimeout(function () {
@@ -378,7 +378,7 @@ function onMouseDown() {
 }
 
 // 弾丸のスピード
-var speed = 100;
+var speed = 200;
 // 時間管理
 var clock = new THREE.Clock();
 var delta = 0;
@@ -395,22 +395,22 @@ function render() {
    // クリア時の挙動
    if (score == sphereNum) {
       blocker.style.display = "";
-         msg.innerHTML = "CLEAR"
-         msg.style.color = "green";
-         controls.enabled = false;
-         controlsFlag = false;
-   
-   
-         var end_func = setInterval(function() {
-            audio.volume = audio.volume - (baseVol / 100);
-            if(audio.volume <= (baseVol / 100)) {
-               audio.volume = baseVol;
-               audio.pause();
-               clearInterval(end_func);
-            }
+      msg.innerHTML = "CLEAR"
+      msg.style.color = "green";
+      controls.enabled = false;
+      controlsFlag = false;
+
+
+      var end_func = setInterval(function () {
+         audio.volume = audio.volume - (baseVol / 100);
+         if (audio.volume <= (baseVol / 100)) {
+            audio.volume = baseVol;
+            audio.pause();
+            clearInterval(end_func);
+         }
       }, fadeSpeed * baseVol / 100);
-   
-         endFlag = true;
+
+      endFlag = true;
    }
 
    // 動かす
@@ -433,20 +433,20 @@ function render() {
       if (x[i] > (500 / 2 - (sphere_width / 2)) || x[i] < (-width / 2 + (sphere_width / 2))) {
          dx[i] = -dx[i];
          x[i] += dx[i];
-     }
-     if (y[i] > (500 / 2 - (sphere_height / 2)) || y[i] < (-height / 2 + (sphere_height / 2))) {
+      }
+      if (y[i] > (500 / 2 - (sphere_height / 2)) || y[i] < (-height / 2 + (sphere_height / 2))) {
          dy[i] = -dy[i];
          y[i] += dy[i];
-     }
-     if (z[i] > (500 / 2 - (sphere_height / 2)) || z[i] < (-height / 2 + (sphere_height / 2))) {
+      }
+      if (z[i] > (500 / 2 - (sphere_height / 2)) || z[i] < (-height / 2 + (sphere_height / 2))) {
          dz[i] = -dz[i];
          z[i] += dz[i];
-     }
+      }
 
       spheres[i].position.x = x[i];
       spheres[i].position.y = y[i];
       spheres[i].position.z = z[i];
-  };
+   };
 
 
 
@@ -455,21 +455,21 @@ function render() {
 
    // controlsのオンオフ
    if (keyboard[81]) {
-   //    if (!startFlag) {
+      //    if (!startFlag) {
 
-   //       audio.volume = 0;
-   //  audio.play();
-   //  var start_func = setInterval(function() {
-   //      audio.volume = audio.volume + (baseVol / 100);
-   //      if(audio.volume >= baseVol - (baseVol / 100)) {
-   //          audio.volume = baseVol;
-   //          clearInterval(start_func);
-   //      }
-   //  }, fadeSpeed * baseVol / 100);
+      //       audio.volume = 0;
+      //  audio.play();
+      //  var start_func = setInterval(function() {
+      //      audio.volume = audio.volume + (baseVol / 100);
+      //      if(audio.volume >= baseVol - (baseVol / 100)) {
+      //          audio.volume = baseVol;
+      //          clearInterval(start_func);
+      //      }
+      //  }, fadeSpeed * baseVol / 100);
 
-   //       startFlag = true;
-   //    }
-      
+      //       startFlag = true;
+      //    }
+
       // まだゲームが終了していなかったら
       // これはデバッグ用なので本番はコメントアウトする
       if (!endFlag) {
@@ -487,13 +487,13 @@ function render() {
       }
    }
 
-   
-
-   
-      
 
 
-   
+
+
+
+
+
 
 
 
@@ -501,32 +501,32 @@ function render() {
    delta = clock.getDelta();
 
 
-// if (!endFlag) {
-//   // timer
-//   time += delta;
-//   //   setTimeout
-//     timeBar.value-=delta;
+   // if (!endFlag) {
+   //   // timer
+   //   time += delta;
+   //   //   setTimeout
+   //     timeBar.value-=delta;
 
-//     // timeの単位はs
-//     if (time > limitTime) {
-//      var end_func = setInterval(function() {
-//         audio.volume = audio.volume - (baseVol / 100);
-//         if(audio.volume <= (baseVol / 100)) {
-//            audio.volume = baseVol;
-//            audio.pause();
-//            clearInterval(end_func);
-//         }
-//   }, fadeSpeed * baseVol / 100);
-//      blocker.style.display = "";
-//      msg.innerHTML = "GAMEOVER"
-//      msg.style.color = "red";
-//      controls.enabled = false;
-//      controlsFlag = false;
+   //     // timeの単位はs
+   //     if (time > limitTime) {
+   //      var end_func = setInterval(function() {
+   //         audio.volume = audio.volume - (baseVol / 100);
+   //         if(audio.volume <= (baseVol / 100)) {
+   //            audio.volume = baseVol;
+   //            audio.pause();
+   //            clearInterval(end_func);
+   //         }
+   //   }, fadeSpeed * baseVol / 100);
+   //      blocker.style.display = "";
+   //      msg.innerHTML = "GAMEOVER"
+   //      msg.style.color = "red";
+   //      controls.enabled = false;
+   //      controlsFlag = false;
 
-//      endFlag = true;
-//     }
-// }
-   
+   //      endFlag = true;
+   //     }
+   // }
+
 
 
    bullets.forEach(b => {
@@ -536,35 +536,48 @@ function render() {
       var targetBullet = b.geometry.boundingSphere.clone();
       targetBullet.applyMatrix4(b.matrixWorld);
 
-    
+
 
       for (i = 0; i < spheres.length; i++) {
-      
+
 
          var targetsphere = spheres[i].geometry.boundingSphere.clone();
          targetsphere.applyMatrix4(spheres[i].matrixWorld);
 
          if (targetsphere.intersectsSphere(targetBullet)) {
 
-            
-                  // StruckAudio.play();
-                  score++;
-                  scoreLabel.innerHTML = score;
-                  console.log("hit");
 
-                  t = scene.getObjectByName(spheres[i].name);
+            // StruckAudio.play();
+            score++;
 
-                  scene.remove(t);
+            console.log("hit");
 
-                  scene.remove(targetsphere);
-                  spheres.splice(i, 1);
 
-                  scene.remove(targetBullet);
-                  scene.remove(b);
 
-                  
-            
-              
+            scene.remove(targetBullet);
+            scene.remove(b);
+
+
+
+
+            scene.remove(targetsphere);
+
+            t = scene.getObjectByName(spheres[i].name);
+
+            scene.remove(t);
+
+
+
+            spheres.splice(i, 1);
+
+
+
+            // score = sphereNum - spheres.length;
+            scoreLabel.innerHTML = score;
+
+
+
+
          }
 
       }
@@ -604,27 +617,27 @@ function windowResize() {
 
 function backTitle() {
    if (endFlag) {
-      window.location.href = "index.html";   
+      window.location.href = "index.html";
    }
 }
 
 function gameEnd(msg) {
-   var end_func = setInterval(function() {
-              audio.volume = audio.volume - (baseVol / 100);
-              if(audio.volume <= (baseVol / 100)) {
-                 audio.volume = baseVol;
-                 audio.pause();
-                 clearInterval(end_func);
-              }
-        }, fadeSpeed * baseVol / 100);
+   var end_func = setInterval(function () {
+      audio.volume = audio.volume - (baseVol / 100);
+      if (audio.volume <= (baseVol / 100)) {
+         audio.volume = baseVol;
+         audio.pause();
+         clearInterval(end_func);
+      }
+   }, fadeSpeed * baseVol / 100);
 
-           blocker.style.display = "";
-           msg.innerHTML = msg;
-           msg.style.color = "red";
-           controls.enabled = false;
-           controlsFlag = false;
-      
-           endFlag = true;
+   blocker.style.display = "";
+   msg.innerHTML = msg;
+   msg.style.color = "red";
+   controls.enabled = false;
+   controlsFlag = false;
+
+   endFlag = true;
 }
 
 window.addEventListener('keydown', keyDown);

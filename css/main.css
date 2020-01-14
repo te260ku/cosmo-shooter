@@ -1,0 +1,111 @@
+﻿body {
+	background-color: #000;
+	color: #888;
+	font-family: Helvetica;
+	line-height: 26px;
+	margin: 0px;
+	overflow: hidden;
+}
+		
+		
+#container {
+	box-sizing: border-box;
+	height: 100%;
+	left: 0;
+	margin: 0;
+	position: absolute;
+	top: 0;
+	width: 100%;
+}
+		
+#blocker {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
+}
+
+		
+#instructions {
+	width: 100%;
+	height: 100%;
+    font-size: 30px;
+    font-family: 'Courier New';
+	display: -webkit-box;
+	display: -moz-box;
+	display: box;
+	-webkit-box-orient: horizontal;
+	-moz-box-orient: horizontal;
+	-webkit-box-pack: center;
+	-moz-box-pack: center;
+	-webkit-box-align: center;
+	-moz-box-align: center;
+	color: #ffffff;
+	text-align: center;
+	cursor: pointer;
+}
+
+#status {
+	position: absolute;
+	left: 5%;
+	top: 5%;
+	width: 100%;
+
+}
+
+#scoreLabel, #timeLabel {
+	/* color: #00cc00; */
+	color: #007bff;
+	padding-top: 20px;
+}
+
+#sightarea {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	text-align: center;
+}
+
+#sight {
+	width: 100%;
+	height: 100%;
+
+	display: -webkit-box;
+	display: -moz-box;
+	display: box;
+	-webkit-box-orient: horizontal;
+	-moz-box-orient: horizontal;
+	-webkit-box-pack: center;
+	-moz-box-pack: center;
+	-webkit-box-align: center;
+	-moz-box-align: center;
+	text-align: center;
+
+}
+
+
+#timeBar {
+	display: inline-block;
+	-webkit-appearance: none;
+	appearance: none;
+	height: 10px;
+	width: 75%;
+	border: none;
+	background-color: #00cc00;
+ }
+ 
+ #timeBar::-webkit-progress-bar {
+	  background: #ccc;
+ }
+ 
+ #timeBar::-webkit-progress-value {
+	background-color: #00cc00;
+ }
+
+ .btn {
+	 font-size: 1em;
+	 color: #ffffff;
+	 border: 1px solid white;
+ }
+
+ 

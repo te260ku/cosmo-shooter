@@ -1,13 +1,23 @@
 <!DOCTYPE html>
-<html lang='ja'>
+<html lang="ja">
 
 <head>
-    <title>shooting</title>
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Cosmo Shooter</title>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="../css/main.css" />
 </head>
 
 <body>
@@ -19,25 +29,14 @@
             <div class="container">
                 <div class="row">
                     <div class="col-12"><strong id="msg"></strong></div>
-                    
                 </div>
-
-                <!-- <div class="row top-button">
-                    <div class="col-12"><button class="btn btn-primay">TOP</button></div>
-                </div> -->
-                
-                
             </div>
-            
         </div>
-        
     </div>
 
     <div id="status">
-
         <progress id="timeBar" value="100" max="100" min="0"></progress>
         <h1 id="scoreLabel">score : <span id="score"></span></h1>
-
     </div>
 
     <!-- <div id="sightarea">
@@ -46,82 +45,14 @@
        </div>
     </div> -->
 
-
     <div id='stage'></div>
 
-
-
-    <script id="vertexShader" type="x-shader/x-vertex">
-
-        uniform float mRefractionRatio;
-            uniform float mFresnelBias;
-            uniform float mFresnelScale;
-            uniform float mFresnelPower;
-
-            varying vec3 vReflect;
-            varying vec3 vRefract[3];
-            varying float vReflectionFactor;
-
-            void main() {
-
-                vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
-                vec4 worldPosition = modelMatrix * vec4( position, 1.0 );
-
-                vec3 worldNormal = normalize( mat3( modelMatrix[0].xyz, modelMatrix[1].xyz, modelMatrix[2].xyz ) * normal );
-
-                vec3 I = worldPosition.xyz - cameraPosition;
-
-                vReflect = reflect( I, worldNormal );
-                vRefract[0] = refract( normalize( I ), worldNormal, mRefractionRatio );
-                vRefract[1] = refract( normalize( I ), worldNormal, mRefractionRatio * 0.99 );
-                vRefract[2] = refract( normalize( I ), worldNormal, mRefractionRatio * 0.98 );
-                vReflectionFactor = mFresnelBias + mFresnelScale * pow( 1.0 + dot( normalize( I ), worldNormal ), mFresnelPower );
-
-                gl_Position = projectionMatrix * mvPosition;
-
-            }
-
-    </script>
-
-    <script id="fragmentShader" type="x-shader/x-fragment">
-
-        uniform samplerCube tCube;
-
-            varying vec3 vReflect;
-            varying vec3 vRefract[3];
-            varying float vReflectionFactor;
-
-            void main() {
-
-                vec4 reflectedColor = textureCube( tCube, vec3( -vReflect.x, vReflect.yz ) );
-                vec4 refractedColor = vec4( 1.0 );
-
-                refractedColor.r = textureCube( tCube, vec3( -vRefract[0].x, vRefract[0].yz ) ).r;
-                refractedColor.g = textureCube( tCube, vec3( -vRefract[1].x, vRefract[1].yz ) ).g;
-                refractedColor.b = textureCube( tCube, vec3( -vRefract[2].x, vRefract[2].yz ) ).b;
-
-                gl_FragColor = mix( refractedColor, reflectedColor, clamp( vReflectionFactor, 0.0, 1.0 ) );
-
-            }
-
-    </script>
-
-
-
-
-    <!-- ローカルのものを読み込んだほうがいい -->
-    <script src="https://threejs.org/build/three.min.js"></script>
-    <!-- <script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script> -->
-    <script src="FirstPersonControls.js"></script>
-    <script src="../demo/MTLLoader.js"></script>
-    <script src="../demo/OBJLoader.js"></script>
-    <!-- <script type="module">
-        import { FresnelShader } from './FresnelShader.js';
-    </script> -->
-    <!-- <script type="module" src="./FresnelShader.js"></script> -->
-    <script src="script.js"></script>
-    
-
+    <!-- <script src="https://threejs.org/build/three.min.js"></script> -->
+    <script src="../js/libs/three.min.js"></script>
+    <script src="../js/libs/FirstPersonControls.js"></script>
+    <script src="../js/libs/MTLLoader.js"></script>
+    <script src="../js/libs/OBJLoader.js"></script>
+    <script src="../js/main.js"></script>
 
 </body>
 
