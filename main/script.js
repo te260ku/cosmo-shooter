@@ -8,15 +8,15 @@ var height = window.innerHeight;
 var light;
 
 
-var sphereRadius = 1;
-var bulletRadius = 0.5;
+var sphereRadius = 0.8;
+var bulletRadius = 0.8;
 var intersectFlag = false;
 
 
 
 // フィールド関連
 var spheres = [];
-var sphereNum = 20;
+var sphereNum = 5;
 var spherePositionX = [10, 8, 12, 0];
 var spherePositionY = [1, 5, 2, 0];
 var spherePositionZ = [0, 10, 10, 0];
@@ -153,23 +153,23 @@ function init() {
 
    // フィールドの生成
 
-   // // 360
-   // const geometry_f = new THREE.SphereGeometry(1000, 80, 80);
-   // geometry_f.scale(-1, 1, 1);
+   // 360
+   const geometry_f = new THREE.SphereGeometry(1000, 80, 80);
+   geometry_f.scale(-1, 1, 1);
 
-   // //テクスチャ画像を読み込み
-   // const loader_f = new THREE.TextureLoader();
-   // const texture_f = loader_f.load("back.JPG");
+   //テクスチャ画像を読み込み
+   const loader_f = new THREE.TextureLoader();
+   const texture_f = loader_f.load("../img/starry-deep-outer-space-galaxy.jpg");
 
-   // //球体のマテリアルを生成
-   // const material_f = new THREE.MeshBasicMaterial({
-   //   map: texture_f
-   // });
+   //球体のマテリアルを生成
+   const material_f = new THREE.MeshBasicMaterial({
+     map: texture_f
+   });
 
-   // //球体を生成
-   // const sphere_f = new THREE.Mesh(geometry_f, material_f);
+   //球体を生成
+   const sphere_f = new THREE.Mesh(geometry_f, material_f);
 
-   // scene.add(sphere_f);
+   scene.add(sphere_f);
 
 
    // 3d model
@@ -197,7 +197,6 @@ function init() {
    //          scene.add(field);
 
    //      });
-
    // });
 
 
@@ -227,10 +226,17 @@ function init() {
 
    // normal
    var sphereGeo = new THREE.SphereGeometry(20, sphere_width, sphere_height);
-   var sphereMat = new THREE.MeshNormalMaterial({ 
-      wireframe: false, 
-      // depthTest: true
-   });
+   // var sphereMat = new THREE.MeshNormalMaterial({ 
+   //    wireframe: false, 
+   //    // depthTest: true
+   // });
+
+   var textureLoader = new THREE.TextureLoader();
+            var texture = textureLoader.load("../img/metal-rust.jpg");
+            var sphereMat = new THREE.MeshPhongMaterial();
+            sphereMat.map = texture;
+
+            
 
    
    
@@ -600,6 +606,25 @@ function backTitle() {
    if (endFlag) {
       window.location.href = "index.html";   
    }
+}
+
+function gameEnd(msg) {
+   var end_func = setInterval(function() {
+              audio.volume = audio.volume - (baseVol / 100);
+              if(audio.volume <= (baseVol / 100)) {
+                 audio.volume = baseVol;
+                 audio.pause();
+                 clearInterval(end_func);
+              }
+        }, fadeSpeed * baseVol / 100);
+
+           blocker.style.display = "";
+           msg.innerHTML = msg;
+           msg.style.color = "red";
+           controls.enabled = false;
+           controlsFlag = false;
+      
+           endFlag = true;
 }
 
 window.addEventListener('keydown', keyDown);
