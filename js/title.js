@@ -24,7 +24,7 @@ function bgmStart() {
   }
 }
 
-var audio = new Audio("../audio/op_bgm.mp3");
+var audio = new Audio("./audio/op_bgm.mp3");
 audio.loop = true;
 
 
@@ -58,7 +58,7 @@ audio.loop = true;
 
    // テクスチャのロード
    loader = new THREE.TextureLoader();
-   loader.load('../img/particle.png', function(texture) {
+   loader.load('./img/particle.png', function(texture) {
      createParticles(texture);
      render();
    });

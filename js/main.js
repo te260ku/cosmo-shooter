@@ -63,9 +63,9 @@ var msg = document.getElementById("msg");
 msg.innerHTML = "Press Q to Start";
 
 // オーディオ関連
-var shotAudio = new Audio("../audio/ShotAudio.mp3");
-var StruckAudio = new Audio("../audio/StruckAudio.mp3");
-var audio = new Audio("../audio/main_bgm.mp3");
+var shotAudio = new Audio("./audio/ShotAudio.mp3");
+var StruckAudio = new Audio("./audio/StruckAudio.mp3");
+var audio = new Audio("./audio/main_bgm.mp3");
 
 
 
@@ -118,13 +118,13 @@ function init() {
 
    // weapon
    var mtlLoader = new THREE.MTLLoader();
-   mtlLoader.load("../demo/models/uziGold.mtl", function(materials){
+   mtlLoader.load("./model/uziGold.mtl", function(materials){
 
         materials.preload();
         var objLoader = new THREE.OBJLoader();
         objLoader.setMaterials(materials);
 
-        objLoader.load("../demo/models/uziGold.obj", function(gun){
+        objLoader.load("./model/uziGold.obj", function(gun){
 
             gun.traverse(function(node){
                 if( node instanceof THREE.Mesh ){
@@ -156,7 +156,7 @@ function init() {
 
    //テクスチャ画像を読み込み
    const loader_f = new THREE.TextureLoader();
-   const texture_f = loader_f.load("../img/starry-deep-outer-space-galaxy.jpg");
+   const texture_f = loader_f.load("./img/starry-deep-outer-space-galaxy.jpg");
 
    //球体のマテリアルを生成
    const material_f = new THREE.MeshBasicMaterial({
@@ -188,7 +188,7 @@ function init() {
    // });
 
    var textureLoader = new THREE.TextureLoader();
-   var texture = textureLoader.load("../img/metal-rust.jpg");
+   var texture = textureLoader.load("./img/metal-rust.jpg");
    var sphereMat = new THREE.MeshPhongMaterial();
    sphereMat.map = texture;
 
