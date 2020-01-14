@@ -5,11 +5,18 @@ var controls;
 var emitter;
 var width = window.innerWidth;
 var height = window.innerHeight;
+var light;
+
+
+var sphereRadius = 1;
+var bulletRadius = 0.5;
+var intersectFlag = false;
+
 
 
 // フィールド関連
 var spheres = [];
-var sphereNum = 4;
+var sphereNum = 20;
 var spherePositionX = [10, 8, 12, 0];
 var spherePositionY = [1, 5, 2, 0];
 var spherePositionZ = [0, 10, 10, 0];
@@ -24,7 +31,7 @@ var limitTime = 10;
 var score = 0;
 var keyboard = {};
 var endFlag = false;
-const min_speed = 0.1;
+const min_speed = 0.5;
 const max_speed = 0.5;
 const sphere_width = 10;
 const sphere_height = 10;
@@ -34,12 +41,12 @@ let x = [];
     let dx = [];
     let dy = [];
     let dz = [];
-    const min_pos_x = -(Number(width) / 2);
-    const max_pos_x = (Number(width) / 2);
-    const min_pos_y = -(Number(height) / 2);
-    const max_pos_y = (Number(height) / 2);
-    const min_pos_z = -(Number(height) / 2);
-    const max_pos_z = (Number(height) / 2);
+    const min_pos_x = -(Number(500) / 2);
+    const max_pos_x = (Number(500) / 2);
+    const min_pos_y = -(Number(500) / 2);
+    const max_pos_y = (Number(500) / 2);
+    const min_pos_z = -(Number(500) / 2);
+    const max_pos_z = (Number(500) / 2);
 
 
 // UI関連
@@ -64,7 +71,6 @@ var audio = new Audio("../audio/main_bgm.mp3");
 
 
 
-
 window.onload = init;
 
 function init() {
@@ -83,7 +89,8 @@ function init() {
    });
    renderer.setSize(window.innerWidth, window.innerHeight);
    renderer.setPixelRatio(window.devicePixelRatio);
-   renderer.setClearColor(new THREE.Color(0xEEEEEE));
+   renderer.setClearColor(new THREE.Color(0x232323));
+   renderer.shadowMapEnabled = true;
    var stage = document.getElementById("stage");
    stage.appendChild(renderer.domElement);
 
@@ -96,58 +103,22 @@ function init() {
    controls.constrainVertical = false;
 
    // 光源の生成
-   ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
+   ambientLight = new THREE.AmbientLight(0xffffff);
    scene.add(ambientLight);
+   light = new THREE.SpotLight();
+   light.position.set(0, 0, 1000);
+   light.castShadow = true; 
+   light.shadowCameraVisible = true;
+   scene.add(light);
 
+   // var weapon = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 5), new THREE.MeshBasicMaterial({
+   //    color: 0x5555ff
+   // }));
+   // weapon.position.set(2, -1, -2.5);
+   // camera.add(weapon);
 
-   // フィールドの生成
-
-   // // 360
-   // const geometry_f = new THREE.SphereGeometry(100, 100, 100);
-   // geometry_f.scale(-1, 1, 1);
-
-   // //テクスチャ画像を読み込み
-   // const loader_f = new THREE.TextureLoader();
-   // const texture_f = loader_f.load("back.JPG");
-
-   // //球体のマテリアルを生成
-   // const material_f = new THREE.MeshBasicMaterial({
-   //   map: texture_f
-   // });
-
-   // //球体を生成
-   // const sphere_f = new THREE.Mesh(geometry_f, material_f);
-
-   // scene.add(sphere_f);
-
-
-
-   var backgroundGeo = new THREE.SphereGeometry(1000, 90, 45);
-   // var textureLoader = new THREE.TextureLoader();
-   // backgroundTex = textureLoader.load("background.jpeg");
    
-   var backgroundMat = new THREE.MeshBasicMaterial({
-      color: "gray",
-      // color:0xffffff, 
-      wireframe: true, 
-      // map: backgroundTex
-   })
-   const background = new THREE.Mesh(backgroundGeo, backgroundMat);
-   scene.add(background);
-
-   // デバッグ用
-   const axes = new THREE.AxisHelper(400);
-   axes.position.set(0, 0, 0);
-   scene.add(axes);
-
-
-   var weapon = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 5), new THREE.MeshBasicMaterial({
-      color: 0x5555ff
-   }));
-   weapon.position.set(2, -1, -2.5);
-   camera.add(weapon);
-
-
+   // weapon
    // var mtlLoader = new THREE.MTLLoader();
    // mtlLoader.load("../demo/models/uziGold.mtl", function(materials){
 
@@ -179,15 +150,141 @@ function init() {
    camera.add(emitter);
 
 
+
+   // フィールドの生成
+
+   // // 360
+   // const geometry_f = new THREE.SphereGeometry(1000, 80, 80);
+   // geometry_f.scale(-1, 1, 1);
+
+   // //テクスチャ画像を読み込み
+   // const loader_f = new THREE.TextureLoader();
+   // const texture_f = loader_f.load("back.JPG");
+
+   // //球体のマテリアルを生成
+   // const material_f = new THREE.MeshBasicMaterial({
+   //   map: texture_f
+   // });
+
+   // //球体を生成
+   // const sphere_f = new THREE.Mesh(geometry_f, material_f);
+
+   // scene.add(sphere_f);
+
+
+   // 3d model
+   // mtlLoaderの宣言は消す
+   // var mtlLoader = new THREE.MTLLoader();
+   // mtlLoader.load("./model/field/materials.mtl", function(materials){
+
+   //      materials.preload();
+   //      var objLoader = new THREE.OBJLoader();
+   //      objLoader.setMaterials(materials);
+
+   //      objLoader.load("./model/field/model.obj", function(field){
+
+   //       field.traverse(function(node){
+   //              if( node instanceof THREE.Mesh ){
+   //                  node.castShadow = true;
+   //                  node.receiveShadow = true;
+   //                  node.depthTest = false;
+
+   //              }
+   //          });
+   //          field.rotation.y += degreesToRadians(180);
+   //          field.scale.set(15,15,15);
+   //          field.position.set(0,-30,0);
+   //          scene.add(field);
+
+   //      });
+
+   // });
+
+
+
+   var backgroundGeo = new THREE.SphereGeometry(500, 45, 45);
+   // var textureLoader = new THREE.TextureLoader();
+   // backgroundTex = textureLoader.load("background.jpeg");
+   
+   var backgroundMat = new THREE.MeshBasicMaterial({
+      color: "gray",
+      // color:0xffffff, 
+      wireframe: true, 
+      // map: backgroundTex
+   })
+   const background = new THREE.Mesh(backgroundGeo, backgroundMat);
+   scene.add(background);
+
+   // デバッグ用
+   const axes = new THREE.AxisHelper(400);
+   axes.position.set(0, 0, 0);
+   scene.add(axes);
+
+
+   
+
    // ----敵の生成------------------------------------
 
-   // var sphereGeo = new THREE.BoxGeometry(1, 1, 1);
-   var sphereGeo = new THREE.SphereGeometry(50, sphere_width, sphere_height);
+   // normal
+   var sphereGeo = new THREE.SphereGeometry(20, sphere_width, sphere_height);
+   var sphereMat = new THREE.MeshNormalMaterial({ 
+      wireframe: false, 
+      // depthTest: true
+   });
+
+   
+   
+   // mtlLoader.load("./model/glass/materials.mtl", function(materials){
+
+   //      materials.preload();
+   //      var objLoader = new THREE.OBJLoader();
+   //      objLoader.setMaterials(materials);
+
+   //      objLoader.load("./model/glass/model.obj", function(glass){
+
+   //          glass.traverse(function(node){
+   //              if( node instanceof THREE.Mesh ){
+   //                  node.castShadow = false;
+   //                  node.receiveShadow = false;
+   //                  node.scale.set(60,60,60);
+   //                //   if (node.geometry.boundingSphere == null) {
+   //                //    node.geometry.computeBoundingSphere();
+   //                //    }
+   //                //    node.geometry.boundingSphere.radius *= sphereRadius;
+   //              }
+   //          });
+
+   //          for (var i = 0; i < sphereNum; i++) {
+               
+   //             glass.name = "sphere-" + [i];
+   //             spheres.push(glass);
+   //             scene.add(glass);
+   //          }
+
+   //          // gun.scale.set(10,10,10);
+   //          // gun.position.set(0.6, -0.5, -1.2);
+
+   //          // camera.add(gun);
+   //      });
+
+   // });
+
+   // frasnel
+   // var sphereGeo = new THREE.SphereBufferGeometry( 100, 32, 16 );
+   // var shader = FresnelShader;
+   // var uniforms = THREE.UniformsUtils.clone( shader.uniforms );
+   // var sphereMat = new THREE.ShaderMaterial( {
+   //    uniforms: uniforms,
+   //    vertexShader: shader.vertexShader,
+   //    fragmentShader: shader.fragmentShader, 
+   // } );
+   
+   // subset
    // var sphereGeo = new THREE.SphereGeometry();
    // var sphereMat = new THREE.MeshPhongMaterial({color:0x5555ff, wireframe:false});
-   var sphereMat = new THREE.MeshNormalMaterial({ wireframe: false });
 
-   // var shader = FresnelShader;
+   
+
 
    
    // すべて生成してシーンに追加
@@ -196,7 +293,7 @@ function init() {
       if (sphere.geometry.boundingSphere == null) {
          sphere.geometry.computeBoundingSphere();
       }
-      sphere.geometry.boundingSphere.radius *= 1.4;
+      sphere.geometry.boundingSphere.radius *= sphereRadius;
       sphere.name = "sphere-" + [i];
       spheres.push(sphere);
       scene.add(sphere);
@@ -245,7 +342,7 @@ var bullets = [];
 var canShoot = true;
 
 function onMouseDown() {
-
+   // intersectFlag = false;
    // shotAudio.play();
    let bullet = new THREE.Mesh(new THREE.SphereGeometry(2, 8, 4), new THREE.MeshBasicMaterial({
       color: "aqua"
@@ -253,7 +350,7 @@ function onMouseDown() {
    if (bullet.geometry.BoundingSphere == null) {
       bullet.geometry.computeBoundingSphere();
    }
-   bullet.geometry.boundingSphere.radius *= 1.2;
+   bullet.geometry.boundingSphere.radius *= bulletRadius;
    // 始点 - 銃の先
    bullet.position.copy(emitter.getWorldPosition()); 
    bullet.quaternion.copy(camera.quaternion); 
@@ -271,7 +368,7 @@ function onMouseDown() {
    canShoot = false;
    setTimeout(function () {
       canShoot = true;
-   }, 1000);
+   }, 500);
 }
 
 // 弾丸のスピード
@@ -289,10 +386,11 @@ function render() {
       onMouseDown();
    }
 
+   // クリア時の挙動
    if (score == sphereNum) {
       blocker.style.display = "";
          msg.innerHTML = "CLEAR"
-         msg.style.color = "red";
+         msg.style.color = "green";
          controls.enabled = false;
          controlsFlag = false;
    
@@ -309,29 +407,35 @@ function render() {
          endFlag = true;
    }
 
-   // // sphereを動かしているところ
-   // step += 0.01;
-   // spheres[0].position.z = 10 + (10*(Math.cos(step)));
-   // spheres[0].position.y = 1.5 + (10*Math.abs(Math.sin(step)));
-
-
    // 動かす
    for (var i in spheres) {
       x[i] += dx[i];
       y[i] += dy[i];
       z[i] += dz[i];
-      if (x[i] > (width / 2 - (sphere_width / 2)) || x[i] < (-width / 2 + (sphere_width / 2))) {
-          dx[i] = -dx[i];
-          x[i] += dx[i];
-      }
-      if (y[i] > (height / 2 - (sphere_height / 2)) || y[i] < (-height / 2 + (sphere_height / 2))) {
-          dy[i] = -dy[i];
-          y[i] += dy[i];
-      }
-      if (z[i] > (height / 2 - (sphere_height / 2)) || z[i] < (-height / 2 + (sphere_height / 2))) {
-          dz[i] = -dz[i];
-          z[i] += dz[i];
-      }
+      // if (x[i] > (width / 2 - (sphere_width / 2)) || x[i] < (-width / 2 + (sphere_width / 2))) {
+      //     dx[i] = -dx[i];
+      //     x[i] += dx[i];
+      // }
+      // if (y[i] > (height / 2 - (sphere_height / 2)) || y[i] < (-height / 2 + (sphere_height / 2))) {
+      //     dy[i] = -dy[i];
+      //     y[i] += dy[i];
+      // }
+      // if (z[i] > (height / 2 - (sphere_height / 2)) || z[i] < (-height / 2 + (sphere_height / 2))) {
+      //     dz[i] = -dz[i];
+      //     z[i] += dz[i];
+      // }
+      if (x[i] > (500 / 2 - (sphere_width / 2)) || x[i] < (-width / 2 + (sphere_width / 2))) {
+         dx[i] = -dx[i];
+         x[i] += dx[i];
+     }
+     if (y[i] > (500 / 2 - (sphere_height / 2)) || y[i] < (-height / 2 + (sphere_height / 2))) {
+         dy[i] = -dy[i];
+         y[i] += dy[i];
+     }
+     if (z[i] > (500 / 2 - (sphere_height / 2)) || z[i] < (-height / 2 + (sphere_height / 2))) {
+         dz[i] = -dz[i];
+         z[i] += dz[i];
+     }
 
       spheres[i].position.x = x[i];
       spheres[i].position.y = y[i];
@@ -345,27 +449,23 @@ function render() {
 
    // controlsのオンオフ
    if (keyboard[81]) {
-      if (!startFlag) {
+   //    if (!startFlag) {
 
+   //       audio.volume = 0;
+   //  audio.play();
+   //  var start_func = setInterval(function() {
+   //      audio.volume = audio.volume + (baseVol / 100);
+   //      if(audio.volume >= baseVol - (baseVol / 100)) {
+   //          audio.volume = baseVol;
+   //          clearInterval(start_func);
+   //      }
+   //  }, fadeSpeed * baseVol / 100);
 
-
-
-         audio.volume = 0;
-    audio.play();
-    var start_func = setInterval(function() {
-        audio.volume = audio.volume + (baseVol / 100);
-        if(audio.volume >= baseVol - (baseVol / 100)) {
-            audio.volume = baseVol;
-            clearInterval(start_func);
-        }
-    }, fadeSpeed * baseVol / 100);
-
-
-
-         startFlag = true;
-      }
+   //       startFlag = true;
+   //    }
       
       // まだゲームが終了していなかったら
+      // これはデバッグ用なので本番はコメントアウトする
       if (!endFlag) {
          if (!controlsFlag) {
             blocker.style.display = "none";
@@ -381,37 +481,45 @@ function render() {
       }
    }
 
+   
+
+   
+      
+
+
+   
+
 
 
    requestAnimationFrame(render);
    delta = clock.getDelta();
 
 
-if (!endFlag) {
-  // timer
-  time += delta;
-  //   setTimeout
-    timeBar.value-=delta;
+// if (!endFlag) {
+//   // timer
+//   time += delta;
+//   //   setTimeout
+//     timeBar.value-=delta;
 
-    // timeの単位はs
-    if (time > limitTime) {
-     var end_func = setInterval(function() {
-        audio.volume = audio.volume - (baseVol / 100);
-        if(audio.volume <= (baseVol / 100)) {
-           audio.volume = baseVol;
-           audio.pause();
-           clearInterval(end_func);
-        }
-  }, fadeSpeed * baseVol / 100);
-     blocker.style.display = "";
-     msg.innerHTML = "GAMEOVER"
-     msg.style.color = "red";
-     controls.enabled = false;
-     controlsFlag = false;
+//     // timeの単位はs
+//     if (time > limitTime) {
+//      var end_func = setInterval(function() {
+//         audio.volume = audio.volume - (baseVol / 100);
+//         if(audio.volume <= (baseVol / 100)) {
+//            audio.volume = baseVol;
+//            audio.pause();
+//            clearInterval(end_func);
+//         }
+//   }, fadeSpeed * baseVol / 100);
+//      blocker.style.display = "";
+//      msg.innerHTML = "GAMEOVER"
+//      msg.style.color = "red";
+//      controls.enabled = false;
+//      controlsFlag = false;
 
-     endFlag = true;
-    }
-}
+//      endFlag = true;
+//     }
+// }
    
 
 
@@ -422,28 +530,35 @@ if (!endFlag) {
       var targetBullet = b.geometry.boundingSphere.clone();
       targetBullet.applyMatrix4(b.matrixWorld);
 
-
+    
 
       for (i = 0; i < spheres.length; i++) {
+      
 
          var targetsphere = spheres[i].geometry.boundingSphere.clone();
          targetsphere.applyMatrix4(spheres[i].matrixWorld);
 
          if (targetsphere.intersectsSphere(targetBullet)) {
-            // StruckAudio.play();
-            score++;
-            scoreLabel.innerHTML = score;
-            console.log("hit");
 
-            t = scene.getObjectByName(spheres[i].name);
+            
+                  // StruckAudio.play();
+                  score++;
+                  scoreLabel.innerHTML = score;
+                  console.log("hit");
 
-            scene.remove(t);
+                  t = scene.getObjectByName(spheres[i].name);
 
-            scene.remove(targetsphere);
-            spheres.splice(i, 1);
+                  scene.remove(t);
 
-            scene.remove(targetBullet);
-            scene.remove(b);
+                  scene.remove(targetsphere);
+                  spheres.splice(i, 1);
+
+                  scene.remove(targetBullet);
+                  scene.remove(b);
+
+                  
+            
+              
          }
 
       }
@@ -481,9 +596,15 @@ function windowResize() {
    renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
+function backTitle() {
+   if (endFlag) {
+      window.location.href = "index.html";   
+   }
+}
+
 window.addEventListener('keydown', keyDown);
 window.addEventListener('keyup', keyUp);
 window.addEventListener('resize', windowResize, false);
-
+window.addEventListener("click", backTitle, false);
 
 
