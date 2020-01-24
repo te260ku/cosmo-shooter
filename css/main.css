@@ -91,7 +91,7 @@
 	height: 10px;
 	width: 75%;
 	border: none;
-	background-color: #00cc00;
+	background-color: #ccc;
  }
  
  #timeBar::-webkit-progress-bar {

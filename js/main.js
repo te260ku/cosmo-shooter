@@ -10,9 +10,6 @@ var light;
 // フィールド関連
 var spheres = [];
 var sphereNum = 5;
-var spherePositionX = [10, 8, 12, 0];
-var spherePositionY = [1, 5, 2, 0];
-var spherePositionZ = [0, 10, 10, 0];
 var spherePositions = {};
 
 // ゲームシステム関連
@@ -230,7 +227,6 @@ function render() {
       Shoot();
    }
 
-   
 
    // 敵を動かす
    for (var i in spheres) {
